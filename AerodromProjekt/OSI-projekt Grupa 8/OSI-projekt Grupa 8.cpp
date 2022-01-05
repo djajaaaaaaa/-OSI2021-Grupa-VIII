@@ -86,6 +86,167 @@ int main()
 	{
 		succes = prijava(tip, ime, lozinka);
 	} while (!succes);
+
+
+	if (tip == "O")
+	{
+		string opcija;
+		do
+		{
+			cout << "Izaberite zeljenu opciju (unesite odgovarajuce slovo) " << endl;
+			cout << "A) Pregled rezervacija" << endl;
+			cout << "B) Otvaranje rezervacije" << endl;
+			cout << "C) Pregled odbijenih rezervacija" << endl;
+			cout << "D) Pregled odobrenih rezervacija" << endl;
+			cout << "E) Kraj" << endl;
+			cin >> opcija;
+			 
+			if (opcija == "A")
+			{
+				// operater.spisakRezervacija();
+			}
+			else if (opcija == "B")
+			{
+				// operater.otvaranjeRezervacije();
+			}
+			else if (opcija == "C")
+			{
+				// operater.odbijeneRezervacije();   
+			}
+			else if (opcija == "D")
+			{
+				// operater.oodbreneRezervacije();
+			}
+			else
+			{
+				cout << "Nepoznata opcija!" << endl;
+			}
+
+		} while (opcija != "E");
+	}
+
+	else if (tip == "K")
+	{
+		string opcija;
+		do
+		{
+			cout << "Izaberite zeljenu opciju (unesite odgovarajuce slovo) " << endl;
+			cout << "A) Kreiranje leta" << endl;
+			cout << "B) Mijenjanje statusa leta" << endl;
+			cout << "C) Prikaz informacija o letu" << endl;
+			cout << "D) Otkazivanje leta" << endl;
+			cout << "E) Kraj" << endl;
+			cin >> opcija;
+
+			if (opcija == "A")
+			{
+				// kontrolor.kreirajLet()
+			}
+			else if (opcija == "B")
+			{
+				// kontrolor.izmjenaStatusa()
+			}
+			else if (opcija == "C")
+			{
+				// kontrolor.informacijeLet()
+			}
+			else if (opcija == "D")
+			{
+				// kontrolor.otkazivanjeLeta()
+			}
+			else
+			{
+				cout << "Nepoznata opcija!" << endl;
+			}
+
+		} while (opcija != "E");
+	}
+
+	else if (tip == "S")
+	{
+		string opcija;
+		do
+		{
+			cout << "Izaberite zeljenu opciju (unesite odgovarajuce slovo) " << endl;
+			cout << "A) Pregled izvjestaja" << endl;
+			cout << "B) Pregled rezervacija" << endl;
+			cout << "C) Kraj" << endl;
+			cin >> opcija;
+
+			if (opcija == "A")
+			{
+				string opcija1;
+				cout << "Odaberite vrstu izvjestaja (unesite odgovarajuce slovo) " << endl;
+				cout << "A) Dnevni" << endl;
+				cout << "B) Sedmicni" << endl;
+				cout << "C) Mjesecni" << endl;
+				
+				if (opcija1 == "A")
+				{
+					// sef.dnevniIzvjestaj()
+				}
+				else if (opcija1 == "B")
+				{
+					// sef.sedmicniIzvjestaj()
+				}
+				else if (opcija1 == "C")
+				{
+					// sef.mjesecniizvjestaj()
+				}
+				else
+				{
+					cout << "Nepoznata opcija!" << endl;
+				}
+			}
+			else if (opcija == "B")
+			{
+				// sef.pregledRezervacija()
+			}
+			else
+			{
+				cout << "Nepoznata opcija!" << endl;
+			}
+
+		} while (opcija != "C");
+	}
+
+	else if (tip == "A")
+	{
+	    string opcija;
+		do
+		{
+			cout << "Izaberite zeljenu opciju (unesite odgovarajuce slovo) " << endl;
+			cout << "A) Kreiranje naloga" << endl;
+			cout << "B) Brisanje naloga" << endl;
+			cout << "C) Suspendovanje naloga" << endl;
+			cout << "D) Kraj" << endl;
+			cin >> opcija;
+
+			if (opcija == "A")
+			{
+				// administrator.kreiranjeNaloga()
+			}
+			else if (opcija == "B")
+			{
+				// administrator.brisanjeNaloga()
+			}
+			else if (opcija == "C")
+			{
+				// administrator.suspendovanejNaloga()
+			}
+			else
+			{
+				cout << "Nepoznata opcija!" << endl;
+			}
+
+		} while (opcija != "D");
+		
+	}
+	else
+	{
+	     cout << "Greska! Nepostojeci tip naloga!" << endl;
+    }
+
     return 0;
 }
 
