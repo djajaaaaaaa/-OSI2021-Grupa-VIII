@@ -1,8 +1,10 @@
 ﻿  Administrator.cpp
+C:\Users\Zlatko\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(15,47): warning C4101: 'lozinka1': unreferenced local variable
+C:\Users\Zlatko\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(15,18): warning C4101: 'ime1': unreferenced local variable
   Kontrolor.cpp
   Korisnik.cpp
   Operater.cpp
   OSI-projekt Grupa 8.cpp
   Sef.cpp
   Generating Code...
-  OSI-projekt Grupa 8.vcxproj -> D:\Git\cmd\osi-projekt\AerodromProjekt\x64\Debug\OSI-projekt Grupa 8.exe
+  OSI-projekt Grupa 8.vcxproj -> C:\Users\Zlatko\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\x64\Debug\OSI-projekt Grupa 8.exe
