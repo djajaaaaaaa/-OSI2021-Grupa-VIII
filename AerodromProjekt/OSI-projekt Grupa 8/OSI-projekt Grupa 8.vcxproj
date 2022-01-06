@@ -149,11 +149,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Administrator.h" />
+    <ClInclude Include="Datum.h" />
     <ClInclude Include="Exceptions.h" />
     <ClInclude Include="Kontrolor.h" />
     <ClInclude Include="Korisnik.h" />
     <ClInclude Include="Operater.h" />
     <ClInclude Include="Sef.h" />
+    <ClInclude Include="Vrijeme.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
