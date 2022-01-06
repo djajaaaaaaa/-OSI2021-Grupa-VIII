@@ -37,6 +37,7 @@ void Korisnik::upisiuFajl(ostream& os) const
 	os.write(ime, sizeof(ime));
 	os.write(lozinka, sizeof(lozinka));
 	os.write(&tip, sizeof(tip));
+	os.write(&suspendovan, sizeof(suspendovan));
 }
 
 void Korisnik::ucitajizFajla(ifstream& is) const
@@ -44,4 +45,14 @@ void Korisnik::ucitajizFajla(ifstream& is) const
 	is.read(const_cast<char*> (ime), sizeof(ime));
 	is.read(const_cast<char*> (lozinka), sizeof(lozinka));
 	is.read(const_cast<char*> (&tip), sizeof(tip));
+}
+
+void Korisnik::suspenduj()
+{
+	this->suspendovan = 1;
+}
+
+void Korisnik::ukloniSuspenziju()
+{
+	this->suspendovan = 0;
 }

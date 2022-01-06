@@ -32,10 +32,11 @@ bool prijava(string& tip, string& imeNaloga, string& sifraNaloga)
 {
 
 	fstream fin;
-	fin.open("korisnici.dat", ios::in);
+	fin.open("korisnici.dat", ios::binary);
 
 	string ime;char ime1[21];string lozinka;char lozinka1[21];
 	char tip1;
+	char suspenzija;
 	int count = 0;
 	cout << "Unesite korisnicko ime"
 		<< ": ";
@@ -48,6 +49,7 @@ bool prijava(string& tip, string& imeNaloga, string& sifraNaloga)
 		fin.read((char*)ime1, sizeof(char[21]));
 		fin.read((char*)lozinka1, sizeof(char[21]));
 		fin.read(&tip1, sizeof(char));
+		fin.read(&suspenzija, sizeof(int));
 		string imeString(ime1);
 		string lozinkaString(lozinka1);
 
@@ -59,6 +61,8 @@ bool prijava(string& tip, string& imeNaloga, string& sifraNaloga)
 				imeNaloga = ime1;
 				sifraNaloga = lozinka1;
 				tip = tip1;
+				if (suspenzija == 1) // suspendovan je pa se ne moze prijaviti, baciti izuzetak  
+					return false;
 				fin.close();
 				return true;
 			}

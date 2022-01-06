@@ -1,10 +1,17 @@
 ﻿  Administrator.cpp
-C:\Users\Zlatko\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(15,47): warning C4101: 'lozinka1': unreferenced local variable
-C:\Users\Zlatko\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(15,18): warning C4101: 'ime1': unreferenced local variable
+C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(34,11): error C2259: 'Korisnik': cannot instantiate abstract class
+C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Korisnik.h(7): message : see declaration of 'Korisnik'
+C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(34,11): message : due to following members:
+C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(34,11): message : 'Korisnik::~Korisnik(void)': is abstract
+C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Korisnik.h(21): message : see declaration of 'Korisnik::~Korisnik'
+C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(34,15): error C2259: 'Korisnik': cannot instantiate abstract class
+C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Korisnik.h(7): message : see declaration of 'Korisnik'
+C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(34,15): message : due to following members:
+C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(34,15): message : 'Korisnik::~Korisnik(void)': is abstract
+C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Korisnik.h(21): message : see declaration of 'Korisnik::~Korisnik'
   Kontrolor.cpp
   Korisnik.cpp
   Operater.cpp
   OSI-projekt Grupa 8.cpp
   Sef.cpp
   Generating Code...
-  OSI-projekt Grupa 8.vcxproj -> C:\Users\Zlatko\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\x64\Debug\OSI-projekt Grupa 8.exe
