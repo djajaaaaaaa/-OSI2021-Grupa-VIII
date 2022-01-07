@@ -4,6 +4,7 @@
 #include "Korisnik.h"
 #include "Vrijeme.h"
 #include "Datum.h"
+#include "Let.h"
 
 class Kontrolor : public Korisnik
 {
@@ -16,5 +17,6 @@ public:
 	void otkazivanjeLeta();
 
 private:
-	bool dodajLetURaspored(Datum, Vrijeme);
+	bool dodajLetURaspored(Let&);
+	bool pretragaLeta(string);
 };
