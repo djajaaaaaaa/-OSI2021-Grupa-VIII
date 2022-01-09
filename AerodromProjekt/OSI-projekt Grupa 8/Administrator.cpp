@@ -71,5 +71,129 @@ void Administrator::dozvoljenoDodavanje(string username, char tip)
 
 void Administrator::obrisiNalog()
 {
-	
+	string ime;
+	std::cout << "Unesi korisnicko ime: ";
+	std::cin >> ime;
+
+	char ime1[21] = {};
+	char c; int i;
+	ifstream file;
+	ofstream temp;
+	file.open("korisnici.dat", ios::binary || ios::in);
+	temp.open("temp.dat", ios::binary || ios::app);
+	while (!file.eof())
+	{
+		file.get(c);
+		while (c != ',')
+		{
+			i = 0;
+			ime1[i++] = c;
+			file.get(c);
+		}
+		ime1[i] = '\0';
+
+		if (ime == ime1)
+		{
+			std::cout << "Korisnik pronadjen!";
+			obrisiLinijuIzDatoteke(file, temp);
+			remove("korisnici.dat");
+			rename("temp.dat", "korisnici.dat");
+		}
+		else
+		{
+			while (c != '\n') // c je u prvoj iteraciji zarez
+				file.get(c);
+			file.get(c);
+		}
+
+	}
+
+	string tmp;
+	tmp = ime1;
+	if (tmp.empty() == true)
+		std::cout << "Korisnik nije pronadjen u bazi podataka!";
+
+}
+
+
+void obrisiLinijuIzDatoteke(std::istream& from, std::ostream& to)
+{
+	// kopiraju se do sad procitani bajtovi u drugu datoteku
+	std::copy_n(std::istreambuf_iterator<char>(from), from.gcount(), std::ostreambuf_iterator<char>(to));
+	char c;
+	from.get(c);
+	while (c != '\n') // ucitati sve do kraja reda da se dodje u sljedeci
+		from.get(c); // ucitava 
+
+	// dosao je do newline karaktera
+	from.get(c);
+	// dosao je do reda poslije ovog kojeg treba obrisati, sada sve do kraja datoteke upisuje u drugu
+	while (!from.eof())
+	{
+		from.get(c);
+		to.put(c);
+	}
+}
+
+void Administrator::suspenzijaNaloga()
+{
+	char flag;
+	do
+	{
+		std::cout << "Suspenzija ili ukidanje suspenzije?(1/0)";
+		std::cin >> flag;
+	} while (flag != 1 && flag != 0);
+
+	string ime;
+	std::cout << "Unesi korisnicko ime naloga: ";
+	std::cin >> ime;
+
+	// dupliranje koda??
+	char ime1[21] = {};
+	char c; int i;
+	ifstream file;
+	ofstream temp;
+	file.open("korisnici.dat", ios::binary || ios::in);
+	temp.open("temp.dat", ios::binary || ios::app);
+	while (!file.eof())
+	{
+		file.get(c);
+		while (c != ',')
+		{
+			i = 0;
+			ime1[i++] = c;
+			file.get(c);
+		}
+		ime1[i] = '\0';
+
+		if (ime == ime1)
+		{
+			std::cout << "Korisnik pronadjen!"; // doci do zadnjeg bajta u redu, dodati bajt i kopirati ostatak
+			/*file.get(c); // zarez poslije username-a
+			while (c != ',')
+			{
+				i = 0;
+				ime1[i++] = c;
+				file.get(c);
+			}
+			file.get(c); // zarez
+			while (c != ',')
+			{
+				i = 0;
+				ime1[i++] = c;
+				file.get(c);
+			}
+			file.get(c);*/
+			remove("korisnici.dat");
+			rename("temp.dat", "korisnici.dat");
+		}
+		else
+		{
+			while (c != '\n') // c je u prvoj iteraciji zarez
+				file.get(c);
+			file.get(c);
+		}
+
+	}
+
 }

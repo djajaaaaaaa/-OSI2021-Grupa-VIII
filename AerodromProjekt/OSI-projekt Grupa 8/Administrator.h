@@ -10,6 +10,8 @@ public:
 	
 	void kreirajNalog();
 	void obrisiNalog();
-	void suspendujNalog();
+	void suspenzijaNaloga();
 	void dozvoljenoDodavanje(string username, char tip);
 };
+
+void obrisiLinijuIzDatoteke(std::istream&, std::ostream&);

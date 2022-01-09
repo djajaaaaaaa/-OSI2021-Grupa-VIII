@@ -9,9 +9,6 @@ C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Ko
 C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(34,15): message : due to following members:
 C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Administrator.cpp(34,15): message : 'Korisnik::~Korisnik(void)': is abstract
 C:\Users\HP\Documents\-OSI2021-Grupa-VIII\AerodromProjekt\OSI-projekt Grupa 8\Korisnik.h(21): message : see declaration of 'Korisnik::~Korisnik'
-  Kontrolor.cpp
-  Korisnik.cpp
-  Operater.cpp
   OSI-projekt Grupa 8.cpp
   Sef.cpp
   Generating Code...
