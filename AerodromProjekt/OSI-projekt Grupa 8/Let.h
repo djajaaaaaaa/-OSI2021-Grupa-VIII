@@ -1,6 +1,4 @@
 #pragma once
-#include "Vrijeme.h"
-#include "Datum.h"
 #include <string>
 using namespace std;
 
@@ -10,13 +8,14 @@ private:
 	string sifra;
 	string odlazak;
 	string dolazak;
-	Vrijeme vrijemePolaska;
-	Vrijeme vrijemeDolaska;
-	Datum datum;
+	string vrijemePolaska;
+	string vrijemeDolaska;
+	string datum;
 	string opis;
 	int brojMjesta;
 	int brojSlobodnihMjesta;
 
 public:
-	Let(string, string, string, Vrijeme, Vrijeme, Datum, string, int, int);
+	Let(string, string, string, string, string, string, string, int, int);
+	friend class Kontrolor;
 };

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <cstring>
 
 Kontrolor::Kontrolor(string ime, string lozinka) : Korisnik(ime, lozinka, 'K')
 {
@@ -13,9 +14,9 @@ void Kontrolor::kreirajLet()
 	string sifra;
 	string odlazak;
 	string dolazak;
-	Vrijeme vrijemePolaska;
-	Vrijeme vrijemeDolaska;
-	Datum datum;
+	string vrijemePolaska;
+	string vrijemeDolaska;
+	string datum;
 	string opis;
 	int brojMjesta;
 	int brojSlobodnihMjesta;
@@ -27,38 +28,17 @@ void Kontrolor::kreirajLet()
 	cin >> odlazak;
 	cout << "Mjesto dolaska:" << endl;
 	cin >> dolazak;
-	cout << "Vrijeme polaska:" << endl;
-	cout << "Sat: ";
-	cin >> vrijemePolaska.sat;
+	cout << "Vrijeme polaska (format ss:mm):" << endl;
+	cin >> vrijemePolaska;
 	cout << endl;
-	cout << "Minut: ";
-	cin >> vrijemePolaska.minut;
-	cout << endl;
-	cout << "Vrijeme dolaska:" << endl;
-	cout << "Sat: ";
-	cin >> vrijemeDolaska.sat;
-	cout << endl;
-	cout << "Minut: ";
-	cin >> vrijemeDolaska.minut;
-	cout << endl;
-	cout << "Datum:" << endl;
-	cout << "Dan: ";
-	cin >> datum.dan;
-	cout << endl;
-	cout << "Mjesec: ";
-	cin >> datum.mjesec;
-	cout << endl;
-	cout << "Godina: ";
-	cin >> datum.godina;
-	cout << endl;
+	cout << "Vrijeme dolaska (format ss:mm):" << endl;
+	cin >> vrijemeDolaska;
+	cout << "Datum (format dd.mm.gggg) " << endl;
+	cin >> datum;
 	cout << "Kratak opis leta: (najvise 150 karaktera)" << endl;
 	do
 	{
-		cin >> opis;
-		if (opis.length() > 150)
-		{
-			cout << "Prekoracili ste dozvoljen broj karaktera! Pokusajte ponovo. " << endl;
-		}
+		std::getline(cin, opis);
 	} while (opis.length() > 150);
 	cout << "Broj mjesta:" << endl;
 	cin >> brojMjesta;
@@ -68,6 +48,7 @@ void Kontrolor::kreirajLet()
 	string odgovor;
 	cout << "Potvrdite kreiranje leta: " << endl;
 	cout << "A) Da, kreiraj     B) Ne, odustani" << endl;
+	cin >> odgovor;
 	if (odgovor == "A")
 	{
 		if (dodajLetURaspored(let1))
@@ -86,32 +67,81 @@ void Kontrolor::kreirajLet()
 
 }
 
+// pomocne funkcije za kreirajLet()
 bool Kontrolor::dodajLetURaspored(Let& let1)
-{
-	fstream fin;
-	fin.open("raspored.txt", ios::in);
-
-	return true;
-}
-
-void Kontrolor::informacijeLet()
-{
-	string sifra;
-	cout << "Unesite šifru leta (6 karaktera): ";
-	cin >> sifra;
-	cout << endl;
-
-	if (!pretragaLeta(sifra))
-		cout << "Neuspjesna pretraga! Trazeni let ne postoji." << endl;
-
-}
-
-bool Kontrolor::pretragaLeta(string sifraLeta)
 {
 	vector<string> row;
 	string line, word;
 	fstream fin;
-	fin.open("raspored.csv", ios::in);
+	fin.open("raspored.txt", ios::in);
+	while (!fin.eof())
+	{
+		row.clear();
+		getline(fin, line);
+		stringstream str(line);
+		while (getline(str, word, ',')) {
+
+			row.push_back(word);
+		}
+		if (!(row.empty()))
+		{
+			if (let1.datum == row[5])  // prvo provjerimo da li letovi imaju isti datum
+			{
+				if ((let1.vrijemePolaska == row[3]) || (let1.vrijemePolaska == row[4]))  // provjeravamo vrijeme dolaska i vrijeme polaska
+					return false;
+			}
+		}
+	}
+	upisiLet(let1);
+	return true;
+}
+
+
+void Kontrolor::upisiLet(Let& let1)
+{
+	fstream fout;
+	fout.open("raspored.txt", ios::out | ios::app);
+	fout << let1.sifra << ",";
+	fout << let1.odlazak << ",";
+	fout << let1.dolazak << ",";
+	fout << let1.vrijemePolaska << ",";
+	fout << let1.vrijemeDolaska << ",";
+	fout << let1.datum << ",";
+	fout << let1.opis << ",";
+	fout << let1.brojMjesta << ",";
+	fout << let1.brojSlobodnihMjesta;
+	fout << "\n";
+}
+
+void Kontrolor::izmjenaStatusa()
+{
+	string sifra;
+	cout << "Unesite sifru leta (6 karaktera): ";
+	cin >> sifra;
+	cout << endl;
+
+
+}
+
+
+void Kontrolor::informacijeLet()
+{
+	string sifra;
+	cout << "Unesite sifru leta (6 karaktera): ";
+	cin >> sifra;
+	cout << endl;
+
+	if (!pretragaLetaZaInf(sifra))
+		cout << "Neuspjesna pretraga! Trazeni let ne postoji." << endl;
+}
+
+// pomocne funkcije informacijeLet()
+bool Kontrolor::pretragaLetaZaInf(string sifraLeta)
+{
+	vector<string> row;
+	string line, word;
+	fstream fin;
+	fin.open("raspored.txt", ios::in);
 	while (!fin.eof())
 	{
 		row.clear();
@@ -137,4 +167,10 @@ bool Kontrolor::pretragaLeta(string sifraLeta)
 		}
 	}
 	return false;
+}
+
+
+void Kontrolor::otkazivanjeLeta()
+{
+
 }

@@ -56,12 +56,6 @@
     <ClInclude Include="Exceptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vrijeme.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Datum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Let.h">
       <Filter>Header Files</Filter>
     </ClInclude>
