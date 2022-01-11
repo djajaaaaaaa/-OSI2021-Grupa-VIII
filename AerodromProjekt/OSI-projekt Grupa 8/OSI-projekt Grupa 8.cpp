@@ -216,7 +216,8 @@ int main()
 
 	else if (tip == "A")
 	{
-	    string opcija;
+		Administrator trenutni(ime, lozinka);
+		string opcija;
 		do
 		{
 			cout << "Izaberite zeljenu opciju (unesite odgovarajuce slovo) " << endl;
@@ -228,7 +229,7 @@ int main()
 
 			if (opcija == "A")
 			{
-				// administrator.kreiranjeNaloga()
+				trenutni.kreirajNalog();
 			}
 			else if (opcija == "B")
 			{
