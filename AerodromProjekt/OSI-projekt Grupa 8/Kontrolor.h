@@ -18,5 +18,6 @@ private:
 	bool dodajLetURaspored(Let&);
 	bool pretragaLetaZaInf(string);
 	void upisiLet(Let&);
+	void zamijeniDatoteke();
 };
 

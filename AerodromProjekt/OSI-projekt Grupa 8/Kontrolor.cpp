@@ -3,6 +3,7 @@
 #include <vector>
 #include <sstream>
 #include <cstring>
+#include <fstream>
 
 Kontrolor::Kontrolor(string ime, string lozinka) : Korisnik(ime, lozinka, 'K')
 {
@@ -28,7 +29,7 @@ void Kontrolor::kreirajLet()
 	cin >> odlazak;
 	cout << "Mjesto dolaska:" << endl;
 	cin >> dolazak;
-	cout << "Vrijeme polaska (format ss:mm):" << endl;
+	cout << "Vrijeme polaska (format ss:mm):" << endl;  //dodati provjeru da li je format ispostovan
 	cin >> vrijemePolaska;
 	cout << endl;
 	cout << "Vrijeme dolaska (format ss:mm):" << endl;
@@ -83,11 +84,16 @@ bool Kontrolor::dodajLetURaspored(Let& let1)
 
 			row.push_back(word);
 		}
-		if (!(row.empty()))
+		if (!(row.empty()))  // ako je raspored prazan
 		{
-			if (let1.datum == row[5])  // prvo provjerimo da li letovi imaju isti datum
+			if (let1.sifra == row[0])
 			{
-				if ((let1.vrijemePolaska == row[3]) || (let1.vrijemePolaska == row[4]))  // provjeravamo vrijeme dolaska i vrijeme polaska
+				cout << "Postoji let sa sifrom " << let1.sifra << " Ne mozete kreirati novi let!" << endl;
+				return false;
+			}
+			if (let1.datum == row[5])
+			{
+				if ((let1.vrijemePolaska == row[3]) || (let1.vrijemePolaska == row[4]))
 					return false;
 			}
 		}
@@ -111,6 +117,7 @@ void Kontrolor::upisiLet(Let& let1)
 	fout << let1.brojMjesta << ",";
 	fout << let1.brojSlobodnihMjesta;
 	fout << "\n";
+	fout.close();
 }
 
 void Kontrolor::izmjenaStatusa()
@@ -120,7 +127,36 @@ void Kontrolor::izmjenaStatusa()
 	cin >> sifra;
 	cout << endl;
 
+	vector<string> row;
+	string line, word;
+	fstream fin;
+	fin.open("raspored.txt", ios::in);
+	while (!fin.eof())
+	{
+		row.clear();
+		getline(fin, line);
+		stringstream str(line);
+		while (getline(str, word, ',')) {
 
+			row.push_back(word);
+		}
+		if (!row.empty())
+		{
+			if (sifra == row[0])
+			{
+				string status;
+				cout << "Promijenite status leta u (poletio, sletio,leti):" << endl;
+				cin >> status;
+				fstream fout;
+				fout.open("status.txt", ios::in | ios::app);
+				fout << sifra << "," << status << "\n";
+				fin.close();
+				cout << "Status uspjesno promjenjen." << endl;
+				return;
+			}
+		}
+	}
+	cout << "Greska! Let ne postoji u rasporedu." << endl;
 }
 
 
@@ -131,12 +167,11 @@ void Kontrolor::informacijeLet()
 	cin >> sifra;
 	cout << endl;
 
-	if (!pretragaLetaZaInf(sifra))
-		cout << "Neuspjesna pretraga! Trazeni let ne postoji." << endl;
+	pretragaLeta(sifra);
 }
 
 // pomocne funkcije informacijeLet()
-bool Kontrolor::pretragaLetaZaInf(string sifraLeta)
+void Kontrolor::pretragaLeta(string sifraLeta)
 {
 	vector<string> row;
 	string line, word;
@@ -152,25 +187,125 @@ bool Kontrolor::pretragaLetaZaInf(string sifraLeta)
 			row.push_back(word);
 		}
 
-		if (sifraLeta == row[0])
+		if (!row.empty())
 		{
-			cout << "Detalji leta:" << endl;
-			cout << "Sifra: " << row[0] << endl;
-			cout << "od: " << row[1] << " do: " << row[2] << endl;
-			cout << "Vrijeme polaska: " << row[3] << endl;
-			cout << "Vrijeme dolaska: " << row[4] << endl;
-			cout << "Datum: " << row[5] << endl;
-			cout << "Opis: " << row[6] << endl;
-			cout << "Broj mjesta: " << row[7] << endl;
-			cout << "Broj slobodnih mjesta: " << row[8] << endl;
-			return true;
+			if (sifraLeta == row[0])
+			{
+				cout << "Detalji leta:" << endl;
+				cout << "Sifra: " << row[0] << endl;
+				cout << "od: " << row[1] << " do: " << row[2] << endl;
+				cout << "Vrijeme polaska: " << row[3] << endl;
+				cout << "Vrijeme dolaska: " << row[4] << endl;
+				cout << "Datum: " << row[5] << endl;
+				cout << "Opis: " << row[6] << endl;
+				cout << "Broj mjesta: " << row[7] << endl;
+				cout << "Broj slobodnih mjesta: " << row[8] << endl;
+				return;
+			}
 		}
 	}
-	return false;
+	cout << "Neuspjesna pretraga! Let ne postoji." << endl;
 }
 
 
 void Kontrolor::otkazivanjeLeta()
 {
+	string sifra;
+	cout << "Unesite sifru leta (6 karaktera): ";
+	cin >> sifra;
+	cout << endl;
 
+	int indikator = 0;
+	vector<string> row;
+	string line, word;
+	ifstream fin;
+	fin.open("raspored.txt", ios::in);
+	ofstream temp;
+	temp.open("temporary.txt", ios::in);
+	while (fin.good())
+	{
+		row.clear();
+		getline(fin, line);
+		stringstream str(line);
+		while (getline(str, word, ','))
+		{
+
+			row.push_back(word);
+		}
+		if (!row.empty())
+		{
+			if (row[0] != sifra)
+			{
+				temp << row[0] << ",";
+				temp << row[1] << ",";
+				temp << row[2] << ",";
+				temp << row[3] << ",";
+				temp << row[4] << ",";
+				temp << row[5] << ",";
+				temp << row[6] << ",";
+				temp << row[7] << ",";
+				temp << row[8];
+				temp << "\n";
+			}
+			else if (row[0] == sifra)
+				indikator = 1;
+		}
+	}
+	fin.clear();
+	fin.seekg(0, ios::beg);
+	fin.close();
+	temp.close();
+
+	if (indikator == 0)
+	{
+		cout << "Greska! Trazeni let ne postoji." << endl;
+		return;
+	}
+	else
+	{
+		cout << "Uspjesno ste obrisali let." << endl;
+	}
+
+	zamijeniDatoteke();
+}
+
+void Kontrolor::zamijeniDatoteke()
+{
+	ofstream fin;
+	fin.open("raspored.txt", ios::trunc);
+	ifstream temp;
+	temp.open("temporary.txt", ios::in);
+
+	vector<string> row;
+	string line, word;
+
+	while (temp.good())
+	{
+		row.clear();
+		getline(temp, line);
+		stringstream str(line);
+		while (getline(str, word, ','))
+		{
+			row.push_back(word);
+		}
+		if (!row.empty())
+		{
+			fin << row[0] << ",";
+			fin << row[1] << ",";
+			fin << row[2] << ",";
+			fin << row[3] << ",";
+			fin << row[4] << ",";
+			fin << row[5] << ",";
+			fin << row[6] << ",";
+			fin << row[7] << ",";
+			fin << row[8];
+			fin << "\n";
+		}
+	}
+	fin.close();
+	temp.close();
+
+	ofstream deleteContent;
+	deleteContent.open("temporary.txt", ios::trunc);
+	deleteContent.close();
 }

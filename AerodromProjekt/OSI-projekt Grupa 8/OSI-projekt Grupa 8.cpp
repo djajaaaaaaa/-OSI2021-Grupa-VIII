@@ -91,9 +91,9 @@ int main()
 		succes = prijava(tip, ime, lozinka);
 	} while (!succes);
 
-
 	if (tip == "O")
 	{
+		Operater op(ime, lozinka);
 		string opcija;
 		do
 		{
@@ -104,7 +104,7 @@ int main()
 			cout << "D) Pregled odobrenih rezervacija" << endl;
 			cout << "E) Kraj" << endl;
 			cin >> opcija;
-			 
+
 			if (opcija == "A")
 			{
 				// operater.spisakRezervacija();
@@ -131,6 +131,7 @@ int main()
 
 	else if (tip == "K")
 	{
+		Kontrolor kon(ime, lozinka);
 		string opcija;
 		do
 		{
@@ -144,19 +145,19 @@ int main()
 
 			if (opcija == "A")
 			{
-				// kontrolor.kreirajLet()
+				kon.kreirajLet();
 			}
 			else if (opcija == "B")
 			{
-				// kontrolor.izmjenaStatusa()
+				kon.izmjenaStatusa();
 			}
 			else if (opcija == "C")
 			{
-				// kontrolor.informacijeLet()
+				kon.informacijeLet();
 			}
 			else if (opcija == "D")
 			{
-				// kontrolor.otkazivanjeLeta()
+				kon.otkazivanjeLeta();
 			}
 			else
 			{
@@ -168,6 +169,7 @@ int main()
 
 	else if (tip == "S")
 	{
+		Sef sef(ime, lozinka);
 		string opcija;
 		do
 		{
@@ -184,7 +186,7 @@ int main()
 				cout << "A) Dnevni" << endl;
 				cout << "B) Sedmicni" << endl;
 				cout << "C) Mjesecni" << endl;
-				
+
 				if (opcija1 == "A")
 				{
 					// sef.dnevniIzvjestaj()
@@ -245,13 +247,12 @@ int main()
 			}
 
 		} while (opcija != "D");
-		
+
 	}
 	else
 	{
-	     cout << "Greska! Nepostojeci tip naloga!" << endl;
-    }
-
+		cout << "Greska! Nepostojeci tip naloga!" << endl;
+	}
     return 0;
 }
 
