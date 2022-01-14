@@ -8,7 +8,7 @@ class Korisnik {
 	char ime[21] = {};
 	char lozinka[21] = {};
 	char tip;
-	char suspendovan = 0; // podrazumijevano nije suspendovan
+	char suspendovan = '0'; // podrazumijevano nije suspendovan
 public:
 	Korisnik();
 	Korisnik(string ime, string lozinka, char tip);

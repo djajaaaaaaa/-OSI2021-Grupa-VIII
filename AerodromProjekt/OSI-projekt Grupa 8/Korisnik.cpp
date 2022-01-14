@@ -45,14 +45,15 @@ void Korisnik::ucitajizFajla(ifstream& is) const
 	is.read(const_cast<char*> (ime), sizeof(ime));
 	is.read(const_cast<char*> (lozinka), sizeof(lozinka));
 	is.read(const_cast<char*> (&tip), sizeof(tip));
+	is.read(const_cast<char*>(&suspendovan), sizeof(suspendovan));
 }
 
 void Korisnik::suspenduj()
 {
-	this->suspendovan = 1;
+	this->suspendovan = '1';
 }
 
 void Korisnik::ukloniSuspenziju()
 {
-	this->suspendovan = 0;
+	this->suspendovan = '0';
 }
