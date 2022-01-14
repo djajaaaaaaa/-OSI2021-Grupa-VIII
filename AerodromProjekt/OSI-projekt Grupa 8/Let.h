@@ -14,8 +14,13 @@ private:
 	string opis;
 	string brojMjesta;
 	string brojSlobodnihMjesta;
+	string status;
 
 public:
 	Let(string, string, string, string, string, string, string, string, string);
+	string getStatus()const
+	{
+		return status;
+	}
 	friend class Kontrolor;
 };

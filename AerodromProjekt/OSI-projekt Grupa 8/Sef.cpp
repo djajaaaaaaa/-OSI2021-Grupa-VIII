@@ -52,7 +52,6 @@ void Sef::dnevniIzvjestaj() const
 	string dan;
 	std::cout << "Unesi dan za pregled izvjestaja: " << std::endl;
 	std::cin >> dan;
-	generisiDIzvjestaj();
 	fstream datoteka;
 	datoteka.open(".\\Izvjestaji\\Dnevni\\" + dan + ".txt", ios::in);
 	ispisDatoteke(datoteka);

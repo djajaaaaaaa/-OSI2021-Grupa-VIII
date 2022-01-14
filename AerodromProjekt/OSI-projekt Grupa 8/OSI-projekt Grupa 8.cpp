@@ -250,7 +250,7 @@ int main()
 			}
 			else if (opcija == 'B')
 			{
-				ulogovani.izmjenaStatusa();
+				ulogovani.izmjenaStatusa(letovi);
 			}
 			else if (opcija == 'C')
 			{

@@ -11,7 +11,7 @@ public:
 	Kontrolor(string, string);
 
 	void kreirajLet(std::vector<Let>&);
-	void izmjenaStatusa();
+	void izmjenaStatusa(std::vector<Let>&);
 	void informacijeLet();
 	void otkazivanjeLeta();
 

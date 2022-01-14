@@ -140,43 +140,28 @@ void Kontrolor::upisiLet(Let& let1)
 	fout.close();
 }
 
-void Kontrolor::izmjenaStatusa()
+void Kontrolor::izmjenaStatusa(std::vector<Let>& letovi)
 {
 	string sifra;
 	cout << "Unesite sifru leta (6 karaktera): ";
 	cin >> sifra;
 	cout << endl;
-
-	vector<string> row;
-	string line, word;
-	fstream fin;
-	fin.open("raspored.txt", ios::in);
-	while (!fin.eof())
+	string datum;
+	cout << "Unesite datum leta (format: dd.mm.gggg.): ";
+	cin >> datum;
+	cout << endl;
+	std::vector<Let>::iterator it = std::find_if(letovi.begin(), letovi.end(), [sifra, datum](Let& let1) { return (datum == let1.datum && sifra == let1.sifra); });
+	if (it == letovi.end())
 	{
-		row.clear();
-		getline(fin, line);
-		stringstream str(line);
-		while (getline(str, word, ',')) {
-
-			row.push_back(word);
-		}
-		if (!row.empty())
-		{
-			if (sifra == row[0])
-			{
-				string status;
-				cout << "Promijenite status leta u (poletio, sletio,leti):" << endl;
-				cin >> status;
-				fstream fout;
-				fout.open("status.txt", ios::in | ios::app);
-				fout << sifra << "," << status << "\n";
-				fin.close();
-				cout << "Status uspjesno promjenjen." << endl;
-				return;
-			}
-		}
+		cout << "Greska! Let ne postoji." << endl;
+		return;
 	}
-	cout << "Greska! Let ne postoji u rasporedu." << endl;
+	string status;
+	cout << "Promjena statusa u (poletio, leti, sletio): ";
+	cin >> status;
+	cout << endl;
+	(*it).status = status;
+	cout << "Uspjesno ste promijenili status leta." << endl;
 }
 
 
