@@ -31,6 +31,7 @@ void Sef::mjesecniIzvjestaj() const
 	string mjesec;
 	std::cout << "Unesi mjesec za pregled izvjestaja: " << std::endl;
 	std::cin >> mjesec;
+
 	fstream datoteka;
 	datoteka.open(".\\Izvjestaji\\Mjesecni\\" + mjesec + ".txt", ios::in);
 	ispisDatoteke(datoteka);
@@ -51,6 +52,7 @@ void Sef::dnevniIzvjestaj() const
 	string dan;
 	std::cout << "Unesi dan za pregled izvjestaja: " << std::endl;
 	std::cin >> dan;
+	generisiDIzvjestaj();
 	fstream datoteka;
 	datoteka.open(".\\Izvjestaji\\Dnevni\\" + dan + ".txt", ios::in);
 	ispisDatoteke(datoteka);

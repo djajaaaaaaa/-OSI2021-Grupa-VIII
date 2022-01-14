@@ -11,7 +11,7 @@ Kontrolor::Kontrolor(string ime, string lozinka) : Korisnik(ime, lozinka, 'K')
 
 }
 
-void Kontrolor::kreirajLet()
+void Kontrolor::kreirajLet(std::vector<Let>& letovi)
 {
 	string sifra;
 	string odlazak;
@@ -71,7 +71,7 @@ void Kontrolor::kreirajLet()
 	cin >> odgovor;
 	if (odgovor == "A")
 	{
-		if (dodajLetURaspored(let1))
+		if (dodajLetURaspored(let1, letovi))
 			cout << "Uspjesno ste kreirali let." << endl;
 		else
 			cout << "Raspored je popunjen! Nije moguce kreirati let." << endl;
@@ -88,7 +88,7 @@ void Kontrolor::kreirajLet()
 }
 
 // pomocne funkcije za kreirajLet()
-bool Kontrolor::dodajLetURaspored(Let& let1)
+bool Kontrolor::dodajLetURaspored(Let& let1, std::vector<Let>& letovi)
 {
 	vector<string> row;
 	string line, word;
@@ -118,6 +118,7 @@ bool Kontrolor::dodajLetURaspored(Let& let1)
 		}
 	}
 	upisiLet(let1);
+	letovi.push_back(let1);
 	return true;
 }
 

@@ -12,5 +12,8 @@ public:
 	void mjesecniIzvjestaj() const;
 	void dnevniIzvjestaj() const;
 	void ispisDatoteke(std::fstream&) const;
-
+private:
+	void generisiDIzvjestaj();
+	void generisiSIzvjestaj();
+	void generisiMIzvjestaj();
 };

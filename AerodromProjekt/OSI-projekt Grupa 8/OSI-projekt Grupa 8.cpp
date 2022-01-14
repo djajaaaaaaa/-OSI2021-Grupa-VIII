@@ -246,7 +246,7 @@ int main()
 
 			if (opcija == 'A')
 			{
-				ulogovani.kreirajLet();
+				ulogovani.kreirajLet(letovi);
 			}
 			else if (opcija == 'B')
 			{
