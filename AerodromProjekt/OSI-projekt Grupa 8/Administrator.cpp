@@ -64,7 +64,7 @@ void Administrator::kreirajNalog()
 
 void Administrator::dozvoljenoDodavanje(string username, char tip)
 {
-	if (tip != 'a' || tip != 'A' || tip != 'k' || tip != 'K' || tip != 'o' || tip != 'O' || tip != 's' || tip != 'S')
+	if (tip != 'a' && tip != 'A' && tip != 'k' && tip != 'K' && tip != 'o' && tip != 'O' && tip != 's' && tip != 'S')
 		throw std::invalid_argument("Nevalidan tip!");
 	int countS = 0, countA = 0;
 	string ime;char ime1[21];string lozinka;char lozinka1[21];

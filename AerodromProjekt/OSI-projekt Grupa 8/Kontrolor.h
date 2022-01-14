@@ -16,8 +16,9 @@ public:
 
 private:
 	bool dodajLetURaspored(Let&);
-	bool pretragaLetaZaInf(string);
+	bool pretragaLetazaInf(string);
 	void upisiLet(Let&);
+	void pretragaLeta(string);
 	void zamijeniDatoteke();
 };
 

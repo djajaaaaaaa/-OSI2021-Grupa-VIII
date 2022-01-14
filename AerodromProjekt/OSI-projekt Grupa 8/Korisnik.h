@@ -13,11 +13,11 @@ public:
 	Korisnik();
 	Korisnik(string ime, string lozinka, char tip);
 	string getIme() const;
+	string getLozinka() const;
 	char getTip() const;
 	void upisiuFajl(ostream&) const;
 	void ucitajizFajla(ifstream&) const;
+	bool isSuspended();
 	void suspenduj();
 	void ukloniSuspenziju();
-	virtual ~Korisnik() = 0
-	{};
 };

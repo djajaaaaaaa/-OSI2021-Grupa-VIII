@@ -1,4 +1,6 @@
 #include <iostream>
+#include <set>
+#include <memory>
 #include "Administrator.h"
 #include "Kontrolor.h"
 #include "Operater.h"
@@ -80,20 +82,82 @@ bool prijava(string& tip, string& imeNaloga, string& sifraNaloga)
 	return false;
 }
 
+Korisnik& prijavaSet(string username, string lozinka, std::set<std::shared_ptr<Korisnik>>& set)
+{
+	auto it = std::find_if(set.begin(), set.end(), [username](std::shared_ptr<Korisnik> k) {return (*k).getIme() == username;});
+	if (it == set.end())
+		throw std::exception("Korisnik ne postoji.");
+
+	if ((*it)->isSuspended()) // ovo je pointer
+		throw std::exception("Korisnik suspendovan.");
+
+	if ((**it).getLozinka() != lozinka)
+		throw std::exception("Pogresna lozinka");
+
+	return **it;
+
+}
+
+
+void ucitajKorisnike(std::set<std::shared_ptr<Korisnik>>& set, std::ifstream& fajl)
+{
+	Korisnik temp;
+	while (!fajl.eof())
+	{
+		temp.ucitajizFajla(fajl);
+		if (temp.getTip() == 'A')
+		{
+			Administrator novi(temp.getIme(), temp.getLozinka());
+			set.emplace(std::make_shared<Korisnik>(novi));
+		}
+		else if (temp.getTip() == 'K')
+		{
+			Kontrolor novi(temp.getIme(), temp.getLozinka());
+			set.emplace(std::make_shared<Korisnik>(novi));
+		}
+		else if (temp.getTip() == 'S')
+		{
+			Sef novi(temp.getIme(), temp.getLozinka());
+			set.emplace(std::make_shared<Korisnik>(novi));
+		}
+		else
+		{
+			Operater novi(temp.getIme(), temp.getLozinka());
+			set.emplace(std::make_shared<Korisnik>(novi));
+		}
+	}
+
+	fajl.close();
+
+}
+
 
 int main()
 {
     initDat();
+	ifstream ucitavanje;
+	ucitavanje.open("korisnici.dat", ios::binary || ios::in);
+	std::set<std::shared_ptr<Korisnik> > korisnici;
+	ucitajKorisnike(korisnici, ucitavanje);
 	string tip, ime, lozinka;
+	
+	// treba obezbijediti 5 pokusaja ili koliko smo vec naveli u specifikaciji
+	std::cout << "Unesi korisnicko ime:" << std::endl;
+	std::cin >> ime;
+	std::cout << "Unesi lozinku:" << std::endl;
+	std::cin >> lozinka;
+	
 	bool succes;
-	do
-	{
-		succes = prijava(tip, ime, lozinka);
-	} while (!succes);
+	//do
+	//{
+		//succes = prijava(tip, ime, lozinka);
+	//} while (!succes);
 
-	if (tip == "O")
+	auto ulogovan = prijavaSet(ime, lozinka, korisnici);
+
+	if (ulogovan.getTip() == 'O')
 	{
-		Operater op(ime, lozinka);
+		Operater& ulogovani = static_cast<Operater&>(ulogovan);
 		string opcija;
 		do
 		{
@@ -107,7 +171,7 @@ int main()
 
 			if (opcija == "A")
 			{
-				// operater.spisakRezervacija();
+				//ulogovani.spisakRezervacija();
 			}
 			else if (opcija == "B")
 			{
@@ -129,9 +193,9 @@ int main()
 		} while (opcija != "E");
 	}
 
-	else if (tip == "K")
+	else if (ulogovan.getTip() == 'K')
 	{
-		Kontrolor kon(ime, lozinka);
+		Kontrolor& ulogovani = static_cast<Kontrolor&>(ulogovan);
 		string opcija;
 		do
 		{
@@ -145,19 +209,19 @@ int main()
 
 			if (opcija == "A")
 			{
-				kon.kreirajLet();
+				ulogovani.kreirajLet();
 			}
 			else if (opcija == "B")
 			{
-				kon.izmjenaStatusa();
+				ulogovani.izmjenaStatusa();
 			}
 			else if (opcija == "C")
 			{
-				kon.informacijeLet();
+				ulogovani.informacijeLet();
 			}
 			else if (opcija == "D")
 			{
-				kon.otkazivanjeLeta();
+				ulogovani.otkazivanjeLeta();
 			}
 			else
 			{
@@ -167,9 +231,9 @@ int main()
 		} while (opcija != "E");
 	}
 
-	else if (tip == "S")
+	else if (ulogovan.getTip() == 'S')
 	{
-		Sef sef(ime, lozinka);
+		Sef& ulogovani = static_cast<Sef&>(ulogovan);
 		string opcija;
 		do
 		{
@@ -189,15 +253,15 @@ int main()
 
 				if (opcija1 == "A")
 				{
-					// sef.dnevniIzvjestaj()
+					ulogovani.dnevniIzvjestaj();
 				}
 				else if (opcija1 == "B")
 				{
-					// sef.sedmicniIzvjestaj()
+					ulogovani.sedmicniIzvjestaj();
 				}
 				else if (opcija1 == "C")
 				{
-					// sef.mjesecniizvjestaj()
+					ulogovani.mjesecniIzvjestaj();
 				}
 				else
 				{
@@ -206,7 +270,7 @@ int main()
 			}
 			else if (opcija == "B")
 			{
-				// sef.pregledRezervacija()
+				ulogovani.pregledRezervacija();
 			}
 			else
 			{
@@ -216,9 +280,9 @@ int main()
 		} while (opcija != "C");
 	}
 
-	else if (tip == "A")
+	else if (ulogovan.getTip() == 'A')
 	{
-		Administrator trenutni(ime, lozinka);
+		Administrator& ulogovani = static_cast<Administrator&>(ulogovan);
 		string opcija;
 		do
 		{
@@ -231,15 +295,15 @@ int main()
 
 			if (opcija == "A")
 			{
-				trenutni.kreirajNalog();
+				ulogovani.kreirajNalog();
 			}
 			else if (opcija == "B")
 			{
-				// administrator.brisanjeNaloga()
+				ulogovani.obrisiNalog();
 			}
 			else if (opcija == "C")
 			{
-				// administrator.suspendovanejNaloga()
+				ulogovani.suspenzijaNaloga();
 			}
 			else
 			{

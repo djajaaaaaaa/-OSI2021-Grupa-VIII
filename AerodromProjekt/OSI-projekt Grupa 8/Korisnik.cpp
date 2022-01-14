@@ -32,6 +32,19 @@ char Korisnik::getTip() const
 	return tip;
 }
 
+string Korisnik::getLozinka() const
+{
+	return lozinka;
+}
+
+bool Korisnik::isSuspended()
+{
+	if (suspendovan == '0')
+		return false;
+	
+	return true;
+}
+
 void Korisnik::upisiuFajl(ostream& os) const
 {
 	os.write(ime, sizeof(ime));
