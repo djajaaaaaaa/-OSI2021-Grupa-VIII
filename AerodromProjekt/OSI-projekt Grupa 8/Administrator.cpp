@@ -2,6 +2,7 @@
 #include "Operater.h"
 #include "Kontrolor.h"
 #include "Sef.h"
+#include <set>
 #include <iostream>
 #include <algorithm>
 
@@ -11,7 +12,7 @@ Administrator::Administrator(string ime, string lozinka) : Korisnik(ime, lozinka
 }
 
 
-void Administrator::kreirajNalog()
+void Administrator::kreirajNalog(std::set<std::shared_ptr<Korisnik>>& set) // da li samo dodavanje u set ili i u datoteku
 {
 	fstream fin;
 	fin.open("korisnici.dat", ios::binary || ios::in || ios::app);
@@ -28,7 +29,7 @@ void Administrator::kreirajNalog()
 
 	try
 	{
-		dozvoljenoDodavanje(ime, tip1);
+		dozvoljenoDodavanje(ime, tip1, set);
 	}
 	catch (const std::exception& e) 
 	{
@@ -40,48 +41,39 @@ void Administrator::kreirajNalog()
 	if (tip1 == 'a' || tip1 == 'A')
 	{
 		Administrator novi(ime, lozinka);
-		novi.upisiuFajl(fin);
+		set.emplace(std::make_shared<Korisnik>(novi));
 	}
 	else if (tip1 == 'k' || tip1 == 'K')
 	{
 		Kontrolor novi(ime, lozinka);
-		novi.upisiuFajl(fin);
+		set.emplace(std::make_shared<Korisnik>(novi));
 	}
 	else if (tip1 == 'o' || tip1 == 'O')
 	{
 		Operater novi(ime, lozinka);
-		novi.upisiuFajl(fin);
+		set.emplace(std::make_shared<Korisnik>(novi));
 	}
 	else
 	{
 		Sef novi(ime, lozinka);
-		novi.upisiuFajl(fin);
+		set.emplace(std::make_shared<Korisnik>(novi));
 	}
 	
 	
 	
 }
 
-void Administrator::dozvoljenoDodavanje(string username, char tip)
+void Administrator::dozvoljenoDodavanje(string username, char tip, std::set<std::shared_ptr<Korisnik>>& set)
 {
 	if (tip != 'a' && tip != 'A' && tip != 'k' && tip != 'K' && tip != 'o' && tip != 'O' && tip != 's' && tip != 'S')
 		throw std::invalid_argument("Nevalidan tip!");
 	int countS = 0, countA = 0;
-	string ime;char ime1[21];string lozinka;char lozinka1[21];
-	char tip1;
-	fstream fin;
-	fin.open("korisnici.dat", ios::in);
-
-	while (!fin.eof())
+	
+	for (auto it = set.begin(); it != set.end(); it++)
 	{
-		fin.read((char*)ime1, sizeof(char[21]));
-		fin.read((char*)lozinka1, sizeof(char[21]));
-		fin.read(&tip1, sizeof(char));
-		if (ime1 == username)
-			throw std::exception("Korisnicko ime vec postoji!"); // druga vrsta exceptiona, definisati
-		if (tip1 == 'S')
+		if ((*it)->getTip() == 'S')
 			countS++;
-		else if (tip1 == 'A')
+		else if ((*it)->getTip() == 'A')
 			countA++;
 	}
 
@@ -97,146 +89,61 @@ void Administrator::dozvoljenoDodavanje(string username, char tip)
 	}
 }
 
-void Administrator::obrisiNalog()
+void Administrator::obrisiNalog(std::set<std::shared_ptr<Korisnik>>& set)
 {
-	string ime; string imeFlag;
+	string ime; 
 	std::cout << "Unesi korisnicko ime: ";
 	std::cin >> ime;
+	std::set<std::shared_ptr<Korisnik> >::iterator it;
 
-	char ime1[21] = {};
-	char c; int i;
-	ifstream file;
-	ofstream temp;
-	file.open("korisnici.dat", ios::binary || ios::in);
-	temp.open("temp.dat", ios::binary || ios::app);
-	while (!file.eof())
+	for (it = set.begin(); it != set.end(); ++it)
 	{
-		file.get(c);
-		while (c != ',')
+		if ((*it)->getIme() == ime)
 		{
-			i = 0;
-			ime1[i++] = c;
-			file.get(c);
+			set.erase(it);
+			std::cout << "Korisnik pronadjen i obrisan!" << std::endl;
+			break;
 		}
-		ime1[i] = '\0';
-
-		if (ime == ime1) 
-		{
-			std::cout << "Korisnik " << ime1 << "pronadjen!";
-			imeFlag = ime1;
-			obrisiLinijuIzDatoteke(file, temp);
-			remove("korisnici.dat");
-			rename("temp.dat", "korisnici.dat");
-		}
-		else
-		{
-			while (c != '\n') // c je u prvoj iteraciji zarez
-				file.get(c);
-			file.get(c);
-		}
-
 	}
-
-	
-	if (imeFlag.empty() == true)
-		std::cout << "Korisnik nije pronadjen u bazi podataka!";
 
 }
 
 
-void obrisiLinijuIzDatoteke(std::istream& from, std::ostream& to)
-{
-	// kopiraju se do sad procitani bajtovi u drugu datoteku
-	std::copy_n(std::istreambuf_iterator<char>(from), from.gcount(), std::ostreambuf_iterator<char>(to));
-	char c;
-	from.get(c);
-	while (c != '\n') // ucitati sve do kraja reda da se dodje u sljedeci
-		from.get(c); // ucitava 
-
-	// dosao je do newline karaktera
-	from.get(c);
-	// dosao je do reda poslije ovog kojeg treba obrisati, sada sve do kraja datoteke upisuje u drugu
-	while (!from.eof())
-	{
-		from.get(c);
-		to.put(c);
-	}
-}
-
-void Administrator::suspenzijaNaloga()
+void Administrator::suspenzijaNaloga(std::set<std::shared_ptr<Korisnik>>& set)
 {
 	char flag;
 	do
 	{
 		std::cout << "Suspenzija ili ukidanje suspenzije?(1/0)";
 		std::cin >> flag;
-	} while (flag != 1 && flag != 0);
 
-	string ime; string imeFlag;
+	} while (flag != '1' && flag != '0');
+
+	string ime; 
 	std::cout << "Unesi korisnicko ime naloga: ";
 	std::cin >> ime;
+	std::set<std::shared_ptr<Korisnik>>::iterator it;
 
-
-	char ime1[21] = {};
-	char c; int i;
-	ifstream file;
-	ofstream temp;
-	file.open("korisnici.dat", ios::binary || ios::in);
-	temp.open("temp.dat", ios::binary || ios::app);
-	
-	while (!file.eof())
+	for (it = set.begin(); it != set.end(); ++it)
 	{
-		file.get(c);
-		while (c != ',')
+		if ((*it)->getIme() == ime)
 		{
-			i = 0;
-			ime1[i++] = c;
-			file.get(c);
-		}
-		ime1[i] = '\0';
+			if (flag == '1')
+			{
+				(*it)->suspenduj();
+				std::cout << "Korisnik suspendovan!" << std::endl;
+				break;
+			}
+			else
+			{
+				(*it)->ukloniSuspenziju();
+				std::cout << "Suspenzija uklonjena!" << std::endl;
+				break;
+			}
 
-		if (ime == ime1) 
-		{
-			std::cout << "Korisnik " << ime1 << "pronadjen!"; // doci do zadnjeg bajta u redu, dodati bajt i kopirati ostatak
-			imeFlag = ime1;
-			file.get(c); // zarez poslije username-a
-			std::fill(ime1, ime1 + sizeof(ime1), 0); // isprazni string za novo citanje
-			while (c != ',') // lozinka
-			{
-				i = 0;
-				ime1[i++] = c;
-				file.get(c);
-			}
-			file.get(c); // zarez
-			std::fill(ime1, ime1 + sizeof(ime1), 0); // isprazni string za novo citanje
-			while (c != ',')
-			{
-				i = 0;
-				ime1[i++] = c;
-				file.get(c);
-			}
-			file.get(c); // zarez dosli smo do flaga za suspenziju
-			std::copy_n(std::istreambuf_iterator<char>(file), file.gcount(), std::ostreambuf_iterator<char>(temp));
-			temp.put(flag);
-			temp.put('\n');
-			// odavde kopiramo ostatak fajla
-			while (!file.eof())
-			{
-				file.get(c);
-				temp.put(c);
-			}
-			remove("korisnici.dat");
-			rename("temp.dat", "korisnici.dat");
 		}
-		else
-		{
-			while (c != '\n') // c je u prvoj iteraciji zarez
-				file.get(c);
-			file.get(c); // getujemo newline karakter
-		}
-
 	}
-
-	if (imeFlag.empty())
+	
+	if (it == set.end())
 		std::cout << "Korisnik nije pronadjen!" << std::endl;
 }

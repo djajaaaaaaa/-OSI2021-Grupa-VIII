@@ -88,10 +88,10 @@ Korisnik& prijavaSet(string username, string lozinka, std::set<std::shared_ptr<K
 	if (it == set.end())
 		throw std::exception("Korisnik ne postoji.");
 
-	if ((*it)->isSuspended()) // ovo je pointer
+	if ((*it)->isSuspended() == true) 
 		throw std::exception("Korisnik suspendovan.");
 
-	if ((**it).getLozinka() != lozinka)
+	if ((*it)->getLozinka() != lozinka)
 		throw std::exception("Pogresna lozinka");
 
 	return **it;
@@ -131,10 +131,18 @@ void ucitajKorisnike(std::set<std::shared_ptr<Korisnik>>& set, std::ifstream& fa
 
 }
 
+void azurirajBazu(std::set<std::shared_ptr<Korisnik>>& set)
+{
+	ofstream fajl;
+	fajl.open("korisnici.dat", ios::binary || ios::out);
+
+	for (auto it = set.begin(); it != set.end(); it++)
+		(*it)->upisiuFajl(fajl);
+}
+
 
 int main()
 {
-    initDat();
 	ifstream ucitavanje;
 	ucitavanje.open("korisnici.dat", ios::binary || ios::in);
 	std::set<std::shared_ptr<Korisnik> > korisnici;
@@ -147,18 +155,18 @@ int main()
 	std::cout << "Unesi lozinku:" << std::endl;
 	std::cin >> lozinka;
 	
+	auto ulogovan = prijavaSet(ime, lozinka, korisnici); 
+
 	bool succes;
 	//do
 	//{
 		//succes = prijava(tip, ime, lozinka);
 	//} while (!succes);
 
-	auto ulogovan = prijavaSet(ime, lozinka, korisnici);
-
 	if (ulogovan.getTip() == 'O')
 	{
 		Operater& ulogovani = static_cast<Operater&>(ulogovan);
-		string opcija;
+		char opcija;
 		do
 		{
 			cout << "Izaberite zeljenu opciju (unesite odgovarajuce slovo) " << endl;
@@ -169,19 +177,19 @@ int main()
 			cout << "E) Kraj" << endl;
 			cin >> opcija;
 
-			if (opcija == "A")
+			if (opcija == 'A')
 			{
 				//ulogovani.spisakRezervacija();
 			}
-			else if (opcija == "B")
+			else if (opcija == 'B')
 			{
 				// operater.otvaranjeRezervacije();
 			}
-			else if (opcija == "C")
+			else if (opcija == 'C')
 			{
 				// operater.odbijeneRezervacije();   
 			}
-			else if (opcija == "D")
+			else if (opcija == 'D')
 			{
 				// operater.oodbreneRezervacije();
 			}
@@ -190,13 +198,13 @@ int main()
 				cout << "Nepoznata opcija!" << endl;
 			}
 
-		} while (opcija != "E");
+		} while (opcija != 'E');
 	}
 
 	else if (ulogovan.getTip() == 'K')
 	{
 		Kontrolor& ulogovani = static_cast<Kontrolor&>(ulogovan);
-		string opcija;
+		char opcija;
 		do
 		{
 			cout << "Izaberite zeljenu opciju (unesite odgovarajuce slovo) " << endl;
@@ -207,19 +215,19 @@ int main()
 			cout << "E) Kraj" << endl;
 			cin >> opcija;
 
-			if (opcija == "A")
+			if (opcija == 'A')
 			{
 				ulogovani.kreirajLet();
 			}
-			else if (opcija == "B")
+			else if (opcija == 'B')
 			{
 				ulogovani.izmjenaStatusa();
 			}
-			else if (opcija == "C")
+			else if (opcija == 'C')
 			{
 				ulogovani.informacijeLet();
 			}
-			else if (opcija == "D")
+			else if (opcija == 'D')
 			{
 				ulogovani.otkazivanjeLeta();
 			}
@@ -228,13 +236,13 @@ int main()
 				cout << "Nepoznata opcija!" << endl;
 			}
 
-		} while (opcija != "E");
+		} while (opcija != 'E');
 	}
 
 	else if (ulogovan.getTip() == 'S')
 	{
 		Sef& ulogovani = static_cast<Sef&>(ulogovan);
-		string opcija;
+		char opcija;
 		do
 		{
 			cout << "Izaberite zeljenu opciju (unesite odgovarajuce slovo) " << endl;
@@ -243,23 +251,24 @@ int main()
 			cout << "C) Kraj" << endl;
 			cin >> opcija;
 
-			if (opcija == "A")
+			if (opcija == 'A')
 			{
-				string opcija1;
+				char opcija1;
 				cout << "Odaberite vrstu izvjestaja (unesite odgovarajuce slovo) " << endl;
 				cout << "A) Dnevni" << endl;
 				cout << "B) Sedmicni" << endl;
 				cout << "C) Mjesecni" << endl;
+				cin >> opcija1;
 
-				if (opcija1 == "A")
+				if (opcija1 == 'A')
 				{
 					ulogovani.dnevniIzvjestaj();
 				}
-				else if (opcija1 == "B")
+				else if (opcija1 == 'B')
 				{
 					ulogovani.sedmicniIzvjestaj();
 				}
-				else if (opcija1 == "C")
+				else if (opcija1 == 'C')
 				{
 					ulogovani.mjesecniIzvjestaj();
 				}
@@ -268,7 +277,7 @@ int main()
 					cout << "Nepoznata opcija!" << endl;
 				}
 			}
-			else if (opcija == "B")
+			else if (opcija == 'B')
 			{
 				ulogovani.pregledRezervacija();
 			}
@@ -277,13 +286,13 @@ int main()
 				cout << "Nepoznata opcija!" << endl;
 			}
 
-		} while (opcija != "C");
+		} while (opcija != 'C');
 	}
 
 	else if (ulogovan.getTip() == 'A')
 	{
 		Administrator& ulogovani = static_cast<Administrator&>(ulogovan);
-		string opcija;
+		char opcija;
 		do
 		{
 			cout << "Izaberite zeljenu opciju (unesite odgovarajuce slovo) " << endl;
@@ -293,30 +302,32 @@ int main()
 			cout << "D) Kraj" << endl;
 			cin >> opcija;
 
-			if (opcija == "A")
+			if (opcija == 'A')
 			{
-				ulogovani.kreirajNalog();
+				ulogovani.kreirajNalog(korisnici);
 			}
-			else if (opcija == "B")
+			else if (opcija == 'B')
 			{
-				ulogovani.obrisiNalog();
+				ulogovani.obrisiNalog(korisnici);
 			}
-			else if (opcija == "C")
+			else if (opcija == 'C')
 			{
-				ulogovani.suspenzijaNaloga();
+				ulogovani.suspenzijaNaloga(korisnici);
 			}
 			else
 			{
 				cout << "Nepoznata opcija!" << endl;
 			}
 
-		} while (opcija != "D");
+		} while (opcija != 'D');
 
 	}
 	else
 	{
 		cout << "Greska! Nepostojeci tip naloga!" << endl;
 	}
+
+	azurirajBazu(korisnici);
     return 0;
 }
 

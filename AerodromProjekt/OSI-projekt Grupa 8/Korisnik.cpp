@@ -1,11 +1,11 @@
 #include "Korisnik.h"
 
-Korisnik::Korisnik() 
+Korisnik::Korisnik() : suspendovan('0')
 {
 
 }
 
-Korisnik::Korisnik(string korIme, string korLozinka, char tipNaloga) : tip(tipNaloga)
+Korisnik::Korisnik(string korIme, string korLozinka, char tipNaloga) : tip(tipNaloga), suspendovan('0')
 {
 	if (korIme.length() > 20 || korLozinka.length() > 20)
 		throw "Predugacko korisnicko ime ili sifra, dozvoljeno 20 karaktera!";
