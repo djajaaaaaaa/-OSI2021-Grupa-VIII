@@ -12,10 +12,10 @@ private:
 	string vrijemeDolaska;
 	string datum;
 	string opis;
-	int brojMjesta;
-	int brojSlobodnihMjesta;
+	string brojMjesta;
+	string brojSlobodnihMjesta;
 
 public:
-	Let(string, string, string, string, string, string, string, int, int);
+	Let(string, string, string, string, string, string, string, string, string);
 	friend class Kontrolor;
 };

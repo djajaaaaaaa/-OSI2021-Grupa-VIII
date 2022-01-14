@@ -1,10 +1,15 @@
 #include <iostream>
 #include <set>
 #include <memory>
+#include <string>
+#include <cstring>
+#include <sstream>
 #include "Administrator.h"
 #include "Kontrolor.h"
 #include "Operater.h"
 #include "Sef.h"
+#include "Let.h"
+#include <vector>
 
 void initDat()
 {
@@ -140,6 +145,26 @@ void azurirajBazu(std::set<std::shared_ptr<Korisnik>>& set)
 		(*it)->upisiuFajl(fajl);
 }
 
+void ucitajLetove(std::vector<Let>& letovi, ifstream& fin)
+{
+	vector<string> row;
+	string line, word;
+	while (!fin.eof())
+	{
+		row.clear();
+		getline(fin, line);
+		stringstream str(line);
+		while (getline(str, word, ',')) {
+
+			row.push_back(word);
+		}
+		if (!(row.empty()))
+		{
+			Let load(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]);
+			letovi.push_back(load);
+		}
+	}
+}
 
 int main()
 {
@@ -157,11 +182,15 @@ int main()
 	
 	auto ulogovan = prijavaSet(ime, lozinka, korisnici); 
 
-	bool succes;
+	//bool succes;
 	//do
 	//{
 		//succes = prijava(tip, ime, lozinka);
 	//} while (!succes);
+	std::vector<Let> letovi;
+	ifstream fin;
+	fin.open("raspored.txt", ios::in);
+	ucitajLetove(letovi, fin);
 
 	if (ulogovan.getTip() == 'O')
 	{

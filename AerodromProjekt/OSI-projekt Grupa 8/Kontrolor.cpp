@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cstring>
 #include <fstream>
+#include "Let.h"
 
 Kontrolor::Kontrolor(string ime, string lozinka) : Korisnik(ime, lozinka, 'K')
 {
@@ -19,16 +20,28 @@ void Kontrolor::kreirajLet()
 	string vrijemeDolaska;
 	string datum;
 	string opis;
-	int brojMjesta;
-	int brojSlobodnihMjesta;
+	string brojMjesta;
+	string brojSlobodnihMjesta;
 
 	cout << "Unesite podatke o letu:" << endl;
 	cout << "Sifra leta:" << endl;
 	cin >> sifra;
 	cout << "Mjesto polaska:" << endl;
 	cin >> odlazak;
+	char b = cin.get();
+	while (b != '\n')
+	{
+		opis += b;
+		b = cin.get();
+	}
 	cout << "Mjesto dolaska:" << endl;
 	cin >> dolazak;
+	b = cin.get();
+	while (b != '\n')
+	{
+		opis += b;
+		b = cin.get();
+	}
 	cout << "Vrijeme polaska (format ss:mm):" << endl;  //dodati provjeru da li je format ispostovan
 	cin >> vrijemePolaska;
 	cout << endl;
@@ -39,11 +52,17 @@ void Kontrolor::kreirajLet()
 	cout << "Kratak opis leta: (najvise 150 karaktera)" << endl;
 	do
 	{
-		std::getline(cin, opis);
+		cin >> opis;
+		b = cin.get();
+		while (b != '\n')
+		{
+			opis += b;
+			b = cin.get();
+		}
 	} while (opis.length() > 150);
 	cout << "Broj mjesta:" << endl;
 	cin >> brojMjesta;
-	brojSlobodnihMjesta = brojMjesta;  //kad se let kreira sva mjesta su slobodna
+	brojSlobodnihMjesta = brojMjesta;
 
 	Let let1(sifra, odlazak, dolazak, vrijemePolaska, vrijemeDolaska, datum, opis, brojMjesta, brojSlobodnihMjesta);
 	string odgovor;
