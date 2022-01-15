@@ -1,5 +1,7 @@
 #include "Kontrolor.h"
 #include <iostream>
+#include "Kontrolor.h"
+#include <iostream>
 #include <vector>
 #include <sstream>
 #include <cstring>
@@ -37,13 +39,13 @@ void Kontrolor::kreirajLet(std::vector<Let>& letovi)
 	}
 	cout << "Mjesto dolaska:" << endl;
 	cin >> dolazak;
-	b = cin.get();
-	while (b != '\n')
+	char f = cin.get();
+	while (f != '\n')
 	{
-		opis += b;
-		b = cin.get();
+		opis += f;
+		f = cin.get();
 	}
-	cout << "Vrijeme polaska (format ss:mm):" << endl;  //dodati provjeru da li je format ispostovan
+	cout << "Vrijeme polaska (format ss:mm):" << endl;
 	cin >> vrijemePolaska;
 	cout << endl;
 	cout << "Vrijeme dolaska (format ss:mm):" << endl;
@@ -54,11 +56,11 @@ void Kontrolor::kreirajLet(std::vector<Let>& letovi)
 	do
 	{
 		cin >> opis;
-		b = cin.get();
-		while (b != '\n')
+		char k = cin.get();
+		while (k != '\n')
 		{
-			opis += b;
-			b = cin.get();
+			opis += k;
+			k = cin.get();
 		}
 	} while (opis.length() > 150);
 	cout << "Broj mjesta:" << endl;
@@ -72,10 +74,18 @@ void Kontrolor::kreirajLet(std::vector<Let>& letovi)
 	cin >> odgovor;
 	if (odgovor == "A")
 	{
-		if (dodajLetURaspored(let1, letovi))
+		if (provjeraSifre(let1, letovi) && provjeraVremena(let1, letovi))
+		{
 			cout << "Uspjesno ste kreirali let." << endl;
+			azurirajRaspored(let1);
+			return;
+
+		}
 		else
+		{
 			cout << "Raspored je popunjen! Nije moguce kreirati let." << endl;
+			return;
+		}
 	}
 	else if (odgovor == "B")
 	{
@@ -89,56 +99,61 @@ void Kontrolor::kreirajLet(std::vector<Let>& letovi)
 }
 
 // pomocne funkcije za kreirajLet()
-bool Kontrolor::dodajLetURaspored(Let& let1, std::vector<Let>& letovi)
+bool Kontrolor::provjeraSifre(Let& let1, std::vector<Let>& letovi)
 {
-	vector<string> row;
-	string line, word;
-	fstream fin;
-	fin.open("raspored.txt", ios::in);
-	while (!fin.eof())
-	{
-		row.clear();
-		getline(fin, line);
-		stringstream str(line);
-		while (getline(str, word, ',')) {
-
-			row.push_back(word);
-		}
-		if (!(row.empty()))  // ako je raspored prazan
+	string sifra = let1.sifra;
+	string datum = let1.datum;
+	std::vector<Let>::iterator it1 = std::find_if(letovi.begin(), letovi.end(), [sifra, datum](const Let& let2)
 		{
-			if (let1.sifra == row[0])
-			{
-				cout << "Postoji let sa sifrom " << let1.sifra << " Ne mozete kreirati novi let!" << endl;
-				return false;
-			}
-			if (let1.datum == row[5])
-			{
-				if ((let1.vrijemePolaska == row[3]) || (let1.vrijemePolaska == row[4]))
-					return false;
-			}
-		}
+			return ((sifra == let2.sifra) && (datum == let2.datum));
+		});
+	if (it1 == letovi.end())
+	{
+		letovi.push_back(let1);
+		return true;
 	}
-	upisiLet(let1);
-	letovi.push_back(let1);
-	return true;
+	return false;
 }
 
+bool Kontrolor::provjeraVremena(Let& let1, std::vector<Let>& letovi)
+{
+	string datum = let1.datum;
+	string odlazak = let1.odlazak;
+	string vp = let1.vrijemePolaska;
+	string vd = let1.vrijemeDolaska;
+	std::vector<Let>::iterator it1 = std::find_if(letovi.begin(), letovi.end(), [datum, odlazak, vp, vd](const Let& let2)
+		{
+			if (odlazak == "Moskva")
+			{
+				return((datum == let2.datum) && (vp == let2.vrijemePolaska) && (vp == let2.vrijemeDolaska));
+			}
+			else
+			{
+				return((datum == let2.datum) && (vd == let2.vrijemePolaska) && (vd == let2.vrijemeDolaska));
+			}
+		});
+	if (it1 == letovi.end())
+	{
+		letovi.push_back(let1);
+		return true;
+	}
+	return false;
+}
 
-void Kontrolor::upisiLet(Let& let1)
+void Kontrolor::azurirajRaspored(const Let& let)
 {
 	fstream fout;
 	fout.open("raspored.txt", ios::out | ios::app);
-	fout << let1.sifra << ",";
-	fout << let1.odlazak << ",";
-	fout << let1.dolazak << ",";
-	fout << let1.vrijemePolaska << ",";
-	fout << let1.vrijemeDolaska << ",";
-	fout << let1.datum << ",";
-	fout << let1.opis << ",";
-	fout << let1.brojMjesta << ",";
-	fout << let1.brojSlobodnihMjesta;
-	fout << "\n";
-	fout.close();
+	fout << let.sifra << ",";
+	fout << let.odlazak << ",";
+	fout << let.dolazak << ",";
+	fout << let.vrijemePolaska << ",";
+	fout << let.vrijemeDolaska << ",";
+	fout << let.datum << ",";
+	fout << let.opis << ",";
+	fout << let.brojMjesta << ",";
+	fout << let.brojSlobodnihMjesta << "\n";
+
 }
 
 void Kontrolor::izmjenaStatusa(std::vector<Let>& letovi)
@@ -166,110 +181,61 @@ void Kontrolor::izmjenaStatusa(std::vector<Let>& letovi)
 }
 
 
-void Kontrolor::informacijeLet()
+void Kontrolor::informacijeLet(std::vector<Let>& letovi)
 {
 	string sifra;
 	cout << "Unesite sifru leta (6 karaktera): ";
 	cin >> sifra;
 	cout << endl;
-
-	pretragaLeta(sifra);
-}
-
-// pomocne funkcije informacijeLet()
-void Kontrolor::pretragaLeta(string sifraLeta)
-{
-	vector<string> row;
-	string line, word;
-	fstream fin;
-	fin.open("raspored.txt", ios::in);
-	while (!fin.eof())
-	{
-		row.clear();
-		getline(fin, line);
-		stringstream str(line);
-		while (getline(str, word, ',')) {
-
-			row.push_back(word);
-		}
-
-		if (!row.empty())
-		{
-			if (sifraLeta == row[0])
-			{
-				cout << "Detalji leta:" << endl;
-				cout << "Sifra: " << row[0] << endl;
-				cout << "od: " << row[1] << " do: " << row[2] << endl;
-				cout << "Vrijeme polaska: " << row[3] << endl;
-				cout << "Vrijeme dolaska: " << row[4] << endl;
-				cout << "Datum: " << row[5] << endl;
-				cout << "Opis: " << row[6] << endl;
-				cout << "Broj mjesta: " << row[7] << endl;
-				cout << "Broj slobodnih mjesta: " << row[8] << endl;
-				return;
-			}
-		}
-	}
-	cout << "Neuspjesna pretraga! Let ne postoji." << endl;
-}
-
-
-void Kontrolor::otkazivanjeLeta()
-{
-	string sifra;
-	cout << "Unesite sifru leta (6 karaktera): ";
-	cin >> sifra;
+	string datum;
+	cout << "Unesite datum leta (format: dd.mm.gggg.): ";
+	cin >> datum;
 	cout << endl;
 
-	int indikator = 0;
-	vector<string> row;
-	string line, word;
-	ifstream fin;
-	fin.open("raspored.txt", ios::in);
-	ofstream temp;
-	temp.open("temporary.txt", ios::in);
-	while (fin.good())
+	std::vector<Let>::iterator it = std::find_if(letovi.begin(), letovi.end(), [sifra, datum](Let& let1) { return (datum == let1.datum && sifra == let1.sifra); });
+	if (it == letovi.end())
 	{
-		row.clear();
-		getline(fin, line);
-		stringstream str(line);
-		while (getline(str, word, ','))
-		{
-
-			row.push_back(word);
-		}
-		if (!row.empty())
-		{
-			if (row[0] != sifra)
-			{
-				temp << row[0] << ",";
-				temp << row[1] << ",";
-				temp << row[2] << ",";
-				temp << row[3] << ",";
-				temp << row[4] << ",";
-				temp << row[5] << ",";
-				temp << row[6] << ",";
-				temp << row[7] << ",";
-				temp << row[8];
-				temp << "\n";
-			}
-			else if (row[0] == sifra)
-				indikator = 1;
-		}
-	}
-	fin.clear();
-	fin.seekg(0, ios::beg);
-	fin.close();
-	temp.close();
-
-	if (indikator == 0)
-	{
-		cout << "Greska! Trazeni let ne postoji." << endl;
+		cout << "Greska! Let ne postoji." << endl;
 		return;
 	}
 	else
 	{
+		cout << "Detalji leta:" << endl;
+		cout << "Sifra: " << (*it).sifra << endl;
+		cout << "od: " << (*it).odlazak << " do: " << (*it).dolazak << endl;
+		cout << "Vrijeme polaska: " << (*it).vrijemePolaska << endl;
+		cout << "Vrijeme dolaska: " << (*it).vrijemeDolaska << endl;
+		cout << "Datum: " << (*it).datum << endl;
+		cout << "Opis: " << (*it).opis << endl;
+		cout << "Broj mjesta: " << (*it).brojMjesta << endl;
+		cout << "Broj slobodnih mjesta: " << (*it).brojSlobodnihMjesta << endl;
+		return;
+	}
+}
+
+
+void Kontrolor::otkazivanjeLeta(std::vector<Let>& letovi)
+{
+	string sifra;
+	cout << "Unesite sifru leta (6 karaktera): ";
+	cin >> sifra;
+	cout << endl;
+	string datum;
+	cout << "Unesite datum leta (format: dd.mm.gggg.): ";
+	cin >> datum;
+	cout << endl;
+
+	std::vector<Let>::iterator it = std::find_if(letovi.begin(), letovi.end(), [sifra, datum](Let& let1) { return (datum == let1.datum && sifra == let1.sifra); });
+	if (it == letovi.end())
+	{
+		cout << "Greska! Let ne postoji." << endl;
+		return;
+	}
+	else
+	{
+		letovi.erase(it);
 		cout << "Uspjesno ste obrisali let." << endl;
+
 		namespace fs = filesystem;
 		fs::path path = filesystem::current_path() / "rezervacije";
 		fs::path path1 = filesystem::current_path() / "odobrene rezervacije";
@@ -279,7 +245,7 @@ void Kontrolor::otkazivanjeLeta()
 		{
 			string filename = entry.path().filename().string();
 			string sifra1 = filename.substr(0, 6);
-			if(sifra1 == sifra)
+			if (sifra1 == sifra)
 				fs::remove(path / (filename));
 		}
 		for (auto const& entry : fs::directory_iterator(path1))
@@ -298,47 +264,4 @@ void Kontrolor::otkazivanjeLeta()
 		}
 		cout << "Sve rezervacije za let su izbrisane." << endl;
 	}
-
-	zamijeniDatoteke();
-}
-
-void Kontrolor::zamijeniDatoteke()
-{
-	ofstream fin;
-	fin.open("raspored.txt", ios::trunc);
-	ifstream temp;
-	temp.open("temporary.txt", ios::in);
-
-	vector<string> row;
-	string line, word;
-
-	while (temp.good())
-	{
-		row.clear();
-		getline(temp, line);
-		stringstream str(line);
-		while (getline(str, word, ','))
-		{
-			row.push_back(word);
-		}
-		if (!row.empty())
-		{
-			fin << row[0] << ",";
-			fin << row[1] << ",";
-			fin << row[2] << ",";
-			fin << row[3] << ",";
-			fin << row[4] << ",";
-			fin << row[5] << ",";
-			fin << row[6] << ",";
-			fin << row[7] << ",";
-			fin << row[8];
-			fin << "\n";
-		}
-	}
-	fin.close();
-	temp.close();
-
-	ofstream deleteContent;
-	deleteContent.open("temporary.txt", ios::trunc);
-	deleteContent.close();
 }
