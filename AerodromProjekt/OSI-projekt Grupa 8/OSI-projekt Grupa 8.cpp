@@ -35,58 +35,6 @@ void initDat()
     fout.close();
 }
 
-bool prijava(string& tip, string& imeNaloga, string& sifraNaloga)
-{
-
-	fstream fin;
-	fin.open("korisnici.dat", ios::binary);
-
-	string ime;char ime1[21];string lozinka;char lozinka1[21];
-	char tip1;
-	char suspenzija;
-	int count = 0;
-	cout << "Unesite korisnicko ime"
-		<< ": ";
-	cin >> ime;
-	cout << "Unesite lozinku"
-		<< ": ";
-	cin >> lozinka;
-
-	while (!fin.eof()) {
-		fin.read((char*)ime1, sizeof(char[21]));
-		fin.read((char*)lozinka1, sizeof(char[21]));
-		fin.read(&tip1, sizeof(char));
-		fin.read(&suspenzija, sizeof(int));
-		string imeString(ime1);
-		string lozinkaString(lozinka1);
-
-		if (imeString == ime) {
-			count = 1;
-			if (lozinkaString == lozinka)
-			{
-				cout << "Prijava uspjesna!\n";
-				imeNaloga = ime1;
-				sifraNaloga = lozinka1;
-				tip = tip1;
-				if (suspenzija == 1) // suspendovan je pa se ne moze prijaviti, baciti izuzetak  
-					return false;
-				fin.close();
-				return true;
-			}
-			else
-			{
-				cout << "Pogresna lozinka!\n";
-				fin.close();
-				return false;
-			}
-		}
-	}
-	if (count == 0)
-		cout << "korisnik nije nadjen\n";
-	fin.close();
-	return false;
-}
-
 Korisnik& prijavaSet(string username, string lozinka, std::set<std::shared_ptr<Korisnik>>& set)
 {
 	auto it = std::find_if(set.begin(), set.end(), [username](std::shared_ptr<Korisnik> k) {return (*k).getIme() == username;});
@@ -182,11 +130,6 @@ int main()
 	
 	auto ulogovan = prijavaSet(ime, lozinka, korisnici); 
 
-	//bool succes;
-	//do
-	//{
-		//succes = prijava(tip, ime, lozinka);
-	//} while (!succes);
 	std::vector<Let> letovi;
 	ifstream fin;
 	fin.open("raspored.txt", ios::in);
@@ -208,19 +151,19 @@ int main()
 
 			if (opcija == 'A')
 			{
-				//ulogovani.spisakRezervacija();
+				ulogovani.spisakRezervacija();
 			}
 			else if (opcija == 'B')
 			{
-				// operater.otvaranjeRezervacije();
+				ulogovani.otvaranjeRezervacije(letovi);
 			}
 			else if (opcija == 'C')
 			{
-				// operater.odbijeneRezervacije();   
+				ulogovani.odbijeneRezervacije();   
 			}
 			else if (opcija == 'D')
 			{
-				// operater.oodbreneRezervacije();
+				ulogovani.odobreneRezervacije();
 			}
 			else
 			{

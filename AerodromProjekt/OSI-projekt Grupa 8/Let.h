@@ -18,9 +18,21 @@ private:
 
 public:
 	Let(string, string, string, string, string, string, string, string, string);
+	string getSifra()const
+	{
+		return sifra;
+	}
 	string getStatus()const
 	{
 		return status;
+	}
+	string getDatum() const
+	{
+		return datum;
+	}
+	string getBrSlobMjesta() const
+	{
+		return brojSlobodnihMjesta;
 	}
 	friend class Kontrolor;
 };
