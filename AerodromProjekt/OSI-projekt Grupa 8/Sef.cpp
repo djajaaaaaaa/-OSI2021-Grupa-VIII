@@ -1,5 +1,6 @@
 #include <iostream>
 #include <filesystem>
+#include <cctype>
 #include "Sef.h"
 namespace fs = std::filesystem;
 
@@ -29,12 +30,10 @@ void Sef::ispisDatoteke(std::fstream& datoteka) const
 void Sef::mjesecniIzvjestaj(std::vector<Let>& letovi) const
 {
 	//datum je formata dd.mm.gggg, znaci znamo tacne pozicije i broj dijelova stringa za poredjenje
-	char mjesec[2];
-	do
-	{
-		std::cout << "Unesi mjesec za pregled izvjestaja: (u formatu broja mjeseca - 0x)" << std::endl;
-		std::cin >> mjesec; // podrazumijeva se tekuca godina
-	} while (mjesec[0] != '0' &&  mjesec[0] != '1');
+	string mjesec;
+	std::cout << "Unesi mjesec za pregled izvjestaja: (u formatu mm.gggg)" << std::endl;
+	std::cin >> mjesec;
+	
 
 	for (auto it = letovi.begin(); it != letovi.end(); ++it)
 	{
@@ -42,8 +41,8 @@ void Sef::mjesecniIzvjestaj(std::vector<Let>& letovi) const
 		temp = it->getDatum();
 		if (it->getStatus() == "sletio")
 		{
-			if (temp[3] == mjesec[0] && temp[4] == mjesec[1])
-				//it->printLet(); // skontati jos sta ide u izvjestaj
+			if (mjesec.substr(3, 4) == temp.substr(6, 4) && mjesec[0] == temp[3] && mjesec[1] == temp[4])
+				it->printInfo();
 		}
 
 	}
@@ -61,14 +60,17 @@ void Sef::sedmicniIzvjestaj(std::vector<Let>& letovi) const
 	{
 		string temp;
 		temp = it->getDatum();
-		if (it->getStatus() == "sletio") // mjesec se podudara ili sa jednom ili sa drugom sedmicom sigurno
+		if (it->getStatus() == "sletio") 
 		{
-			if (temp[3] == sedmica1[3] && temp[4] == sedmica1[4] || temp[3] == sedmica2[3] && temp[4] == sedmica2[4])
+			if (temp.substr(6, 4) == sedmica1.substr(6, 4) || temp.substr(6, 4) == sedmica2.substr(6, 4))
 			{
-				if (temp[0] > sedmica1[0] && temp[0] < sedmica2[0]) // vrijedi da je izmedju te sdvije sedmice
-					//it->printLet();
-				else if (temp[0] == sedmica1[0] && temp[0] == sedmica2[0] && temp[1] > sedmica1[1] && temp[1] < sedmica2[1])
-					//it->printLet();
+				if (temp.substr(3, 2) == sedmica1.substr(3, 2) || temp.substr(3, 2) == sedmica2.substr(3, 2))
+				{
+					if (temp[0] > sedmica1[0] && temp[0] < sedmica2[0]) 
+						it->printInfo();
+					else if (temp[0] == sedmica1[0] && temp[0] == sedmica2[0] && temp[1] > sedmica1[1] && temp[1] < sedmica2[1])
+						it->printInfo();
+				}
 			}
 		}
 	}
@@ -85,9 +87,38 @@ void Sef::dnevniIzvjestaj(std::vector<Let>& letovi) const
 		string temp;
 		temp = it->getDatum();
 		if (it->getStatus() == "sletio")
-			if (datum == temp) // podrazumijeva se da je pravilno unesen da su  u istim formatima
-				//it->printLet(); // skontati jos sta ide u izvjestaj
+			if (datum == temp) 
+				it->printInfo(); 
 	}
 	
 }
 
+bool provjeraUnesenogDatuma(string datum) // datum treba da bude unesen u formatu dd.mm.gggg
+{
+	
+	auto checkDate = [](string& str) -> bool
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			if (i != 2 && i != 5)
+				if (!isdigit(str[i]))
+					return false;
+		}
+
+		if (str[2] != '.' && str[5] != '.')
+			return false;
+
+		return true;
+	};
+
+	if (datum.size() != 10)
+		return false;
+	else if (checkDate(datum) == false)
+		return false;
+	else if (datum[0] == '3' && datum[1] > '1')
+		return false;
+	else if (datum[3] == '1' && datum[4] > '2')
+		return false;
+
+	return true;
+}
