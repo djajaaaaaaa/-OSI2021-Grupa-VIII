@@ -1,7 +1,5 @@
 #pragma once
 #include <string>
-#include <iomanip>
-#include <iostream>
 using namespace std;
 
 class Let
@@ -36,13 +34,5 @@ public:
 	{
 		return brojSlobodnihMjesta;
 	}
-
-	void printInfo() const
-	{
-		std::cout << this->sifra << std::setw(8) << this->odlazak << " - " << this->dolazak << std::setw(8)
-			<< this->datum << std::setw(8) << this->vrijemePolaska << " - " << this->vrijemeDolaska << std::setw(8)
-			<< this->status << std::endl;
-	}
-
 	friend class Kontrolor;
 };
