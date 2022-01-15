@@ -26,34 +26,68 @@ void Sef::ispisDatoteke(std::fstream& datoteka) const
 		std::cout << linija << std::endl;
 }
 
-void Sef::mjesecniIzvjestaj() const
+void Sef::mjesecniIzvjestaj(std::vector<Let>& letovi) const
 {
-	string mjesec;
-	std::cout << "Unesi mjesec za pregled izvjestaja: " << std::endl;
-	std::cin >> mjesec;
+	//datum je formata dd.mm.gggg, znaci znamo tacne pozicije i broj dijelova stringa za poredjenje
+	char mjesec[2];
+	do
+	{
+		std::cout << "Unesi mjesec za pregled izvjestaja: (u formatu broja mjeseca - 0x)" << std::endl;
+		std::cin >> mjesec; // podrazumijeva se tekuca godina
+	} while (mjesec[0] != '0' &&  mjesec[0] != '1');
 
-	fstream datoteka;
-	datoteka.open(".\\Izvjestaji\\Mjesecni\\" + mjesec + ".txt", ios::in);
-	ispisDatoteke(datoteka);
+	for (auto it = letovi.begin(); it != letovi.end(); ++it)
+	{
+		string temp;
+		temp = it->getDatum();
+		if (it->getStatus() == "sletio")
+		{
+			if (temp[3] == mjesec[0] && temp[4] == mjesec[1])
+				//it->printLet(); // skontati jos sta ide u izvjestaj
+		}
+
+	}
 }
 
-void Sef::sedmicniIzvjestaj() const
+void Sef::sedmicniIzvjestaj(std::vector<Let>& letovi) const
 {
-	string sedmica;
-	std::cout << "Unesi sedmicu za pregled izvjestaja: " << std::endl;
-	std::cin >> sedmica;
-	fstream datoteka;
-	datoteka.open(".\\Izvjestaji\\Sedmicni\\" + sedmica + ".txt", ios::in);
-	ispisDatoteke(datoteka);
+	string sedmica1; string sedmica2;
+	std::cout << "Unesi datum pocetka sedmice za pregled izvjestaja: (u formatu dd.mm.gggg) " << std::endl;
+	std::cin >> sedmica1;
+	std::cout << "Unesi datum kraja sedmice za pregled izvjestaja: (u formatu dd.mm.gggg) " << std::endl;
+	std::cin >> sedmica2; // dodati provjere na nekorektnost unesenog datuma
+	
+	for (auto it = letovi.begin(); it != letovi.end(); ++it)
+	{
+		string temp;
+		temp = it->getDatum();
+		if (it->getStatus() == "sletio") // mjesec se podudara ili sa jednom ili sa drugom sedmicom sigurno
+		{
+			if (temp[3] == sedmica1[3] && temp[4] == sedmica1[4] || temp[3] == sedmica2[3] && temp[4] == sedmica2[4])
+			{
+				if (temp[0] > sedmica1[0] && temp[0] < sedmica2[0]) // vrijedi da je izmedju te sdvije sedmice
+					//it->printLet();
+				else if (temp[0] == sedmica1[0] && temp[0] == sedmica2[0] && temp[1] > sedmica1[1] && temp[1] < sedmica2[1])
+					//it->printLet();
+			}
+		}
+	}
+
 }
 
-void Sef::dnevniIzvjestaj() const
+void Sef::dnevniIzvjestaj(std::vector<Let>& letovi) const
 {
-	string dan;
-	std::cout << "Unesi dan za pregled izvjestaja: " << std::endl;
-	std::cin >> dan;
-	fstream datoteka;
-	datoteka.open(".\\Izvjestaji\\Dnevni\\" + dan + ".txt", ios::in);
-	ispisDatoteke(datoteka);
+	string datum;
+	std::cout << "Unesi datum za pregled izvjestaja: (u formatu dd.mm.gggg) " << std::endl;
+	std::cin >> datum;
+	for (auto it = letovi.begin(); it != letovi.end(); ++it)
+	{
+		string temp;
+		temp = it->getDatum();
+		if (it->getStatus() == "sletio")
+			if (datum == temp) // podrazumijeva se da je pravilno unesen da su  u istim formatima
+				//it->printLet(); // skontati jos sta ide u izvjestaj
+	}
+	
 }
 

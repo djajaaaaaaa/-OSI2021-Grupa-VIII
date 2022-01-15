@@ -234,15 +234,15 @@ int main()
 
 				if (opcija1 == 'A')
 				{
-					ulogovani.dnevniIzvjestaj();
+					ulogovani.dnevniIzvjestaj(letovi);
 				}
 				else if (opcija1 == 'B')
 				{
-					ulogovani.sedmicniIzvjestaj();
+					ulogovani.sedmicniIzvjestaj(letovi);
 				}
 				else if (opcija1 == 'C')
 				{
-					ulogovani.mjesecniIzvjestaj();
+					ulogovani.mjesecniIzvjestaj(letovi);
 				}
 				else
 				{
