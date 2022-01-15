@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cstring>
 #include <fstream>
+#include <filesystem>
 #include "Let.h"
 
 Kontrolor::Kontrolor(string ime, string lozinka) : Korisnik(ime, lozinka, 'K')
@@ -269,6 +270,33 @@ void Kontrolor::otkazivanjeLeta()
 	else
 	{
 		cout << "Uspjesno ste obrisali let." << endl;
+		namespace fs = filesystem;
+		fs::path path = filesystem::current_path() / "rezervacije";
+		fs::path path1 = filesystem::current_path() / "odobrene rezervacije";
+		fs::path path2 = filesystem::current_path() / "otkazane rezervacije";
+
+		for (auto const& entry : fs::directory_iterator(path))
+		{
+			string filename = entry.path().filename().string();
+			string sifra1 = filename.substr(0, 6);
+			if(sifra1 == sifra)
+				fs::remove(path / (filename));
+		}
+		for (auto const& entry : fs::directory_iterator(path1))
+		{
+			string filename = entry.path().filename().string();
+			string sifra1 = filename.substr(0, 6);
+			if (sifra1 == sifra)
+				fs::remove(path1 / (filename));
+		}
+		for (auto const& entry : fs::directory_iterator(path2))
+		{
+			string filename = entry.path().filename().string();
+			string sifra1 = filename.substr(0, 6);
+			if (sifra1 == sifra)
+				fs::remove(path2 / (filename));
+		}
+		cout << "Sve rezervacije za let su izbrisane." << endl;
 	}
 
 	zamijeniDatoteke();

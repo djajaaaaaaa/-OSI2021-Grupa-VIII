@@ -45,8 +45,8 @@ void Operater::otvaranjeRezervacije(std::vector<Let>& letovi) const
 		getline(fin, datum);
 
 		cout << "Sifra leta: " << sifraleta << endl
-			<< "Polazak: " << datum << " iz" << odakle << " u" << uzlet << "casova; Dolazak: "
-			<< gdje << " u" << slet << "casova" << endl;
+			<< "Polazak: " << datum << " iz " << odakle << " u " << uzlet << " casova; Dolazak: "
+			<< gdje << " u " << slet << " casova" << endl;
 		fin.close();
 		cout << "Validnost rezervacije:\n";
 		for (int i = 0; i < letovi.size(); i++)
