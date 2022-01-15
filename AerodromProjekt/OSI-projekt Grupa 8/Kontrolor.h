@@ -12,14 +12,12 @@ public:
 
 	void kreirajLet(std::vector<Let>&);
 	void izmjenaStatusa(std::vector<Let>&);
-	void informacijeLet();
-	void otkazivanjeLeta();
+	void informacijeLet(std::vector<Let>&);
+	void otkazivanjeLeta(std::vector<Let>&);
 
 private:
-	bool dodajLetURaspored(Let&, std::vector<Let>&);
-	bool pretragaLetazaInf(string);
-	void upisiLet(Let&);
-	void pretragaLeta(string);
-	void zamijeniDatoteke();
+	bool provjeraSifre(Let&, std::vector<Let>&);
+	bool provjeraVremena(Let&, std::vector<Let>&);
+	void azurirajRaspored(const Let&);
 };
 
