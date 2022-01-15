@@ -197,11 +197,11 @@ int main()
 			}
 			else if (opcija == 'C')
 			{
-				ulogovani.informacijeLet();
+				ulogovani.informacijeLet(letovi);
 			}
 			else if (opcija == 'D')
 			{
-				ulogovani.otkazivanjeLeta();
+				ulogovani.otkazivanjeLeta(letovi);
 			}
 			else
 			{
