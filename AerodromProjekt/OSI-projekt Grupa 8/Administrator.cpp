@@ -71,6 +71,12 @@ void Administrator::dozvoljenoDodavanje(string username, char tip, std::set<std:
 	
 	for (auto it = set.begin(); it != set.end(); it++)
 	{
+		if ((*it)->getIme() == username)
+			throw std::invalid_argument("Korisnicko ime vec postoji!");
+	}
+
+	for (auto it = set.begin(); it != set.end(); it++)
+	{
 		if ((*it)->getTip() == 'S')
 			countS++;
 		else if ((*it)->getTip() == 'A')
@@ -92,8 +98,12 @@ void Administrator::dozvoljenoDodavanje(string username, char tip, std::set<std:
 void Administrator::obrisiNalog(std::set<std::shared_ptr<Korisnik>>& set)
 {
 	string ime; 
-	std::cout << "Unesi korisnicko ime: ";
-	std::cin >> ime;
+	do
+	{
+		std::cout << "Unesi korisnicko ime: ";
+		std::cin >> ime;
+	} while (ime == this->getIme());
+
 	std::set<std::shared_ptr<Korisnik> >::iterator it;
 
 	for (it = set.begin(); it != set.end(); ++it)
@@ -120,30 +130,63 @@ void Administrator::suspenzijaNaloga(std::set<std::shared_ptr<Korisnik>>& set)
 	} while (flag != '1' && flag != '0');
 
 	string ime; 
-	std::cout << "Unesi korisnicko ime naloga: ";
-	std::cin >> ime;
-	std::set<std::shared_ptr<Korisnik>>::iterator it;
-
-	for (it = set.begin(); it != set.end(); ++it)
+	do
 	{
-		if ((*it)->getIme() == ime)
-		{
-			if (flag == '1')
-			{
-				(*it)->suspenduj();
-				std::cout << "Korisnik suspendovan!" << std::endl;
-				break;
-			}
-			else
-			{
-				(*it)->ukloniSuspenziju();
-				std::cout << "Suspenzija uklonjena!" << std::endl;
-				break;
-			}
+		std::cout << "Unesi korisnicko ime naloga: ";
+		std::cin >> ime;
+	} while (ime == this->getIme());
 
-		}
-	}
-	
+	std::set<std::shared_ptr<Korisnik>>::iterator it;
+	it = std::find_if(set.begin(), set.end(), [ime](std::shared_ptr<Korisnik> k) {return (*k).getIme() == ime;});
 	if (it == set.end())
-		std::cout << "Korisnik nije pronadjen!" << std::endl;
+	{
+		std::cout << "Nije pronadjen korisnik sa zadatim imenom!" << std::endl;
+		return;
+	}
+
+	string name = (*it)->getIme();
+	string loz = (*it)->getLozinka();
+	char tip = (*it)->getTip();
+
+	set.erase(it);
+
+	if (tip == 'A')
+	{
+		Administrator novi(ime, loz);
+		if (flag == '1')
+			novi.suspenduj();
+		else
+			novi.ukloniSuspenziju();
+		set.emplace(std::make_shared<Korisnik>(novi));
+	}
+	else if (tip == 'S')
+	{
+		Sef novi(ime, loz);
+		if (flag == '1')
+			novi.suspenduj();
+		else
+			novi.ukloniSuspenziju();
+		set.emplace(std::make_shared<Korisnik>(novi));
+	}
+	else if (tip == 'K')
+
+	{
+		Kontrolor novi(ime, loz);
+		if (flag == '1')
+			novi.suspenduj();
+		else
+			novi.ukloniSuspenziju();
+		set.emplace(std::make_shared<Korisnik>(novi));
+	}
+	else if (tip == 'O')
+	{
+		Operater novi(ime, loz);
+		if (flag == '1')
+			novi.suspenduj();
+		else
+			novi.ukloniSuspenziju();
+		set.emplace(std::make_shared<Korisnik>(novi));
+	}
+
+
 }

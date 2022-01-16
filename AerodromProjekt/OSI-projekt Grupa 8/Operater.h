@@ -4,6 +4,7 @@
 #include <fstream>
 #include <filesystem>
 #include "Let.h"
+#include "Korisnik.h"
 
 class Operater : public Korisnik
 {

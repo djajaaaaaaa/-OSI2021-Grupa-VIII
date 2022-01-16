@@ -1,15 +1,33 @@
 #pragma once
+#include <iostream>
 #include <stdexcept>
 
-class PrekoracenBrojNaloga : public std::exception
+class KorisnikNePostoji : virtual public std::exception
 {
+	std::string error;
 public:
-	
+	explicit KorisnikNePostoji(const std::string& msg) : error(msg) {}
+	virtual const char* what() const throw() {
+		return error.c_str();
+	}
 };
 
-
-class KorisnikPostoji : public std::exception
+class KorisnikSuspendovan : public std::exception
 {
+	std::string error;
+public:
+	explicit KorisnikSuspendovan(const std::string& msg) : error(msg) {}
+	const char* what() const throw() {
+		return error.c_str();
+	}
+};
 
-
+class NeispravnaLozinka : public std::exception
+{
+	std::string error;
+public:
+	explicit NeispravnaLozinka(const std::string& msg) : error(msg) {}
+	const char* what() const throw() {
+		return error.c_str();
+	}
 };

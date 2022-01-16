@@ -44,6 +44,10 @@ void Sef::mjesecniIzvjestaj(std::vector<Let>& letovi) const
 	std::cout << "Unesi mjesec za pregled izvjestaja: (u formatu mm.gggg)" << std::endl;
 	std::cin >> mjesec;
 
+	std::cout << "Sifra leta:" << std::setw(10) << "Odlazak:" << " - " << "Dolazak:" << std::setw(20)
+		<< "Datum:" << std::setw(30) << "Vrijeme polaska:" << " - " << "Vrijeme dolaska:" << std::setw(15)
+		<< "Status:" << std::endl;
+
 	for (auto it = letovi.begin(); it != letovi.end(); ++it)
 	{
 		string temp;
@@ -69,6 +73,11 @@ void Sef::sedmicniIzvjestaj(std::vector<Let>& letovi) const
 		std::cin >> sedmica2; // dodati provjere na nekorektnost unesenog datuma
 	} while (provjeraUnesenogDatuma(sedmica1) == false && provjeraUnesenogDatuma(sedmica2) == false
 		&& sedmica1 > sedmica2);
+
+	std::cout << "Sifra leta:" << std::setw(10) << "Odlazak:" << " - " << "Dolazak:" << std::setw(20)
+		<< "Datum:" << std::setw(30) << "Vrijeme polaska:" << " - " << "Vrijeme dolaska:" << std::setw(15)
+		<< "Status:" << std::endl;
+
 	for (auto it = letovi.begin(); it != letovi.end(); ++it)
 	{
 		string temp;
@@ -112,6 +121,11 @@ void Sef::dnevniIzvjestaj(std::vector<Let>& letovi) const
 		std::cout << "Unesi datum za pregled izvjestaja: (u formatu dd.mm.gggg.) " << std::endl;
 		std::cin >> datum;
 	} while (provjeraUnesenogDatuma(datum) == false);
+
+	std::cout << "Sifra leta:" << std::setw(10) << "Odlazak:" << " - " << "Dolazak:" << std::setw(20)
+		<< "Datum:" << std::setw(30) << "Vrijeme polaska:" << " - " << "Vrijeme dolaska:" << std::setw(15)
+		<< "Status:" << std::endl;
+
 	for (auto it = letovi.begin(); it != letovi.end(); ++it)
 	{
 		string temp;

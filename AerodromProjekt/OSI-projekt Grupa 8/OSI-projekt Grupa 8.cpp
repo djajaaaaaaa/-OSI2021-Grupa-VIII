@@ -9,6 +9,7 @@
 #include "Operater.h"
 #include "Sef.h"
 #include "Let.h"
+#include "Exceptions.h"
 #include <vector>
 
 void initDat()
@@ -122,13 +123,40 @@ int main()
 	ucitajKorisnike(korisnici, ucitavanje);
 	string tip, ime, lozinka;
 	
-	// treba obezbijediti 5 pokusaja ili koliko smo vec naveli u specifikaciji
-	std::cout << "Unesi korisnicko ime:" << std::endl;
-	std::cin >> ime;
-	std::cout << "Unesi lozinku:" << std::endl;
-	std::cin >> lozinka;
-	
-	auto ulogovan = prijavaSet(ime, lozinka, korisnici); 
+	bool prijavaFlag = false;
+	int i = 0;
+	Korisnik ulogovan;
+
+	do
+	{
+		try
+		{
+			std::cout << "Unesi korisnicko ime:" << std::endl;
+			std::cin >> ime;
+			std::cout << "Unesi lozinku:" << std::endl;
+			std::cin >> lozinka;
+			ulogovan = prijavaSet(ime, lozinka, korisnici);
+
+			prijavaFlag = true;
+		}
+		catch (KorisnikNePostoji& e)
+		{
+			i++;
+			std::cout << e.what() << std::endl;
+
+		}
+		catch (KorisnikSuspendovan& k)
+		{
+			i++;
+			std::cout << k.what() << std::endl;
+		}
+		catch (NeispravnaLozinka& n)
+		{
+			i++;
+			std::cout << n.what() << std::endl;
+		}
+
+	} while (prijavaFlag == false && i < 5);
 
 	std::vector<Let> letovi;
 	ifstream fin;

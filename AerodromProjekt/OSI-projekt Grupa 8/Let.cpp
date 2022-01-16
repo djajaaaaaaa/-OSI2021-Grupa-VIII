@@ -8,7 +8,7 @@ Let::Let(string sifra, string odlazak, string dolazak, string vrijemePolaska, st
 
 void Let::printInfo() const
 {
-	std::cout << this->sifra << std::setw(8) << this->odlazak << " - " << this->dolazak << std::setw(8)
-		<< this->datum << std::setw(8) << this->vrijemePolaska << " - " << this->vrijemeDolaska << std::setw(8)
+	std::cout << this->sifra << std::setw(15) << this->odlazak << " - " << this->dolazak << std::setw(25)
+		<< this->datum << std::setw(30) << this->vrijemePolaska << " - " << this->vrijemeDolaska << std::setw(24)
 		<< this->status << std::endl;
 }
