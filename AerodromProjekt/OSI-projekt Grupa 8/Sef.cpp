@@ -11,9 +11,20 @@ Sef::Sef(string ime, string lozinka) : Korisnik(ime, lozinka, 'S')
 
 void Sef::pregledRezervacija() const
 {
-	fstream datoteka;
-	datoteka.open("rezervacije.txt", ios::in); // relativna putanja
-	ispisDatoteke(datoteka);
+	namespace fs = filesystem;
+	fs::path path = filesystem::current_path() / "rezervacije";
+	fstream file;
+
+	int i = 0;
+	for (auto const& entry : fs::directory_iterator(path))
+	{
+		string dat = entry.path().string();
+		file.open(dat, ios::in);
+		ispisDatoteke(file);
+		std::cout << std::endl;
+			file.close();
+	}
+
 
 }
 

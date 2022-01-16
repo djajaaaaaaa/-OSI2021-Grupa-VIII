@@ -152,7 +152,8 @@ void Kontrolor::azurirajRaspored(const Let& let)
 	fout << let.datum << ",";
 	fout << let.opis << ",";
 	fout << let.brojMjesta << ",";
-	fout << let.brojSlobodnihMjesta << "\n";
+	fout << let.brojSlobodnihMjesta << ",";
+	fout << let.status << "\n";
 
 }
 

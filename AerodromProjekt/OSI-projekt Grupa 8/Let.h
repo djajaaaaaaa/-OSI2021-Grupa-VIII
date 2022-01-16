@@ -19,7 +19,7 @@ private:
 	string status;
 
 public:
-	Let(string, string, string, string, string, string, string, string, string);
+	Let(string, string, string, string, string, string, string, string, string, string status = "nijePoletio");
 	string getSifra()const
 	{
 		return sifra;
@@ -37,12 +37,7 @@ public:
 		return brojSlobodnihMjesta;
 	}
 
-	void printInfo() const
-	{
-		std::cout << this->sifra << std::setw(8) << this->odlazak << " - " << this->dolazak << std::setw(8)
-			<< this->datum << std::setw(8) << this->vrijemePolaska << " - " << this->vrijemeDolaska << std::setw(8)
-			<< this->status << std::endl;
-	}
+	void printInfo() const;
 
 	friend class Kontrolor;
 };
