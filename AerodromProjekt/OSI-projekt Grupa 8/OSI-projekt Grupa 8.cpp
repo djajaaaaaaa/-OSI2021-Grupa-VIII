@@ -36,10 +36,10 @@ void initDat()
     fout.close();
 }
 
-Korisnik& prijavaSet(string username, string lozinka, std::set<std::shared_ptr<Korisnik>>& set)
+Korisnik& prijavaSet(string username, string lozinka, std::vector<std::shared_ptr<Korisnik>>& vector)
 {
-	auto it = std::find_if(set.begin(), set.end(), [username](std::shared_ptr<Korisnik> k) {return (*k).getIme() == username;});
-	if (it == set.end())
+	auto it = std::find_if(vector.begin(),vector.end(), [username](std::shared_ptr<Korisnik> k) {return (*k).getIme() == username;});
+	if (it == vector.end())
 		throw std::exception("Korisnik ne postoji.");
 
 	if ((*it)->isSuspended() == true) 
@@ -49,11 +49,10 @@ Korisnik& prijavaSet(string username, string lozinka, std::set<std::shared_ptr<K
 		throw std::exception("Pogresna lozinka");
 
 	return **it;
-
 }
 
 
-void ucitajKorisnike(std::set<std::shared_ptr<Korisnik>>& set, std::ifstream& fajl)
+void ucitajKorisnike(std::vector<std::shared_ptr<Korisnik>>& vector, std::ifstream& fajl)
 {
 	Korisnik temp;
 	while (!fajl.eof())
@@ -62,35 +61,34 @@ void ucitajKorisnike(std::set<std::shared_ptr<Korisnik>>& set, std::ifstream& fa
 		if (temp.getTip() == 'A')
 		{
 			Administrator novi(temp.getIme(), temp.getLozinka());
-			set.emplace(std::make_shared<Korisnik>(novi));
+			vector.push_back(std::make_shared<Korisnik>(novi));
 		}
 		else if (temp.getTip() == 'K')
 		{
 			Kontrolor novi(temp.getIme(), temp.getLozinka());
-			set.emplace(std::make_shared<Korisnik>(novi));
+			vector.push_back(std::make_shared<Korisnik>(novi));
 		}
 		else if (temp.getTip() == 'S')
 		{
 			Sef novi(temp.getIme(), temp.getLozinka());
-			set.emplace(std::make_shared<Korisnik>(novi));
+			vector.push_back(std::make_shared<Korisnik>(novi));
 		}
 		else
 		{
 			Operater novi(temp.getIme(), temp.getLozinka());
-			set.emplace(std::make_shared<Korisnik>(novi));
+			vector.push_back(std::make_shared<Korisnik>(novi));
 		}
 	}
-
 	fajl.close();
 
 }
 
-void azurirajBazu(std::set<std::shared_ptr<Korisnik>>& set)
+void azurirajBazu(std::vector<std::shared_ptr<Korisnik>>& vector)
 {
 	ofstream fajl;
 	fajl.open("korisnici.dat", ios::binary || ios::out);
 
-	for (auto it = set.begin(); it != set.end(); it++)
+	for (auto it = vector.begin(); it != vector.end(); it++)
 		(*it)->upisiuFajl(fajl);
 }
 
@@ -119,7 +117,7 @@ int main()
 {
 	ifstream ucitavanje;
 	ucitavanje.open("korisnici.dat", ios::binary || ios::in);
-	std::set<std::shared_ptr<Korisnik> > korisnici;
+	std::vector<std::shared_ptr<Korisnik> > korisnici;
 	ucitajKorisnike(korisnici, ucitavanje);
 	string tip, ime, lozinka;
 	
@@ -326,8 +324,8 @@ int main()
 	{
 		cout << "Greska! Nepostojeci tip naloga!" << endl;
 	}
+    return 0;
 
 	azurirajBazu(korisnici);
-    return 0;
 }
 

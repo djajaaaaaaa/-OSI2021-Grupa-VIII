@@ -1,7 +1,7 @@
 #pragma once
 #include "Korisnik.h"
 #include <string>
-#include <set>
+#include <vector>
 using std::string;
 
 class Administrator : public Korisnik
@@ -9,9 +9,9 @@ class Administrator : public Korisnik
 public:
 	Administrator(string, string);
 	
-	void kreirajNalog(std::set<std::shared_ptr<Korisnik>>& set);
-	void obrisiNalog(std::set<std::shared_ptr<Korisnik>>& set);
-	void suspenzijaNaloga(std::set<std::shared_ptr<Korisnik>>& set);
-	void dozvoljenoDodavanje(string username, char tip, std::set<std::shared_ptr<Korisnik>>& set);
+	void kreirajNalog(std::vector<std::shared_ptr<Korisnik>>& );
+	void obrisiNalog(std::vector<std::shared_ptr<Korisnik>>&);
+	void suspenzijaNaloga(std::vector<std::shared_ptr<Korisnik>>& );
+	void dozvoljenoDodavanje(string username, char tip, std::vector<std::shared_ptr<Korisnik>>& set);
 };
 
