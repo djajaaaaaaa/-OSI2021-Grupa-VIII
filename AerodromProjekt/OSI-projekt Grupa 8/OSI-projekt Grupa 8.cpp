@@ -108,7 +108,7 @@ void ucitajLetove(std::vector<Let>& letovi, ifstream& fin)
 		}
 		if (!(row.empty()))
 		{
-			Let load(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]);
+			Let load(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]);
 			letovi.push_back(load);
 		}
 	}
@@ -165,7 +165,7 @@ int main()
 			{
 				ulogovani.odobreneRezervacije();
 			}
-			else
+			else if(opcija != 'E')
 			{
 				cout << "Nepoznata opcija!" << endl;
 			}
@@ -203,7 +203,7 @@ int main()
 			{
 				ulogovani.otkazivanjeLeta(letovi);
 			}
-			else
+			else if(opcija != 'E')
 			{
 				cout << "Nepoznata opcija!" << endl;
 			}
@@ -253,7 +253,7 @@ int main()
 			{
 				ulogovani.pregledRezervacija();
 			}
-			else
+			else if(opcija != 'C')
 			{
 				cout << "Nepoznata opcija!" << endl;
 			}
@@ -286,7 +286,7 @@ int main()
 			{
 				ulogovani.suspenzijaNaloga(korisnici);
 			}
-			else
+			else if(opcija != 'D')
 			{
 				cout << "Nepoznata opcija!" << endl;
 			}

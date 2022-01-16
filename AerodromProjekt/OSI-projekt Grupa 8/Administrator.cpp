@@ -17,7 +17,7 @@ void Administrator::kreirajNalog(std::set<std::shared_ptr<Korisnik>>& set) // da
 	fstream fin;
 	fin.open("korisnici.dat", ios::binary || ios::in || ios::app);
 
-	string ime;char ime1[21];string lozinka;char lozinka1[21];
+	string ime;string lozinka;
 	char tip1;
 
 	std::cout << "Korisnicko ime: ";

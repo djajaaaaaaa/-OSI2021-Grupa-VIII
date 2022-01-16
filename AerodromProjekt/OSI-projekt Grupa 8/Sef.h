@@ -15,3 +15,4 @@ public:
 	void ispisDatoteke(std::fstream&) const;
 };
 
+bool provjeraUnesenogDatuma(string);

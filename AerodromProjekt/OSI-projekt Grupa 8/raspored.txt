@@ -1,6 +1,6 @@
-176913,Pariz,Moskva,12:00,16:00,12.01.2022.,Francuska kompanija Air France. Let bez presjedanja.,75,75
-182103,Moskva,Pariz,13:00,20:30,17.02.2022.,Let sa presjedanjem.,60,60
-186612,Moskva,Nica,09:00,13:00,30.05.2022.,Direktan let.,85,85
-188102,Moskva,Sant,15:30,16:45,11.03.2022.,Kompanija Ural Airlines,93,93
-190609,Sant,Moskva,18:00,19:30,08.04.2022.,Kratak let bez presjedanja. Kompanija Aeroflot.,74,74
-200101,Moskva,Njujork,04:20,22:00,11.11.2022.,Let sa presjedanjem. Kompanija Delta.,100,100
+176913,Pariz,Moskva,12:00,16:00,12.01.2022.,Francuska kompanija Air France. Let bez presjedanja.,75,75,nijeSletio
+182103,Moskva,Pariz,13:00,20:30,17.02.2022.,Let sa presjedanjem.,60,60,nijeSletio
+186612,Moskva,Nica,09:00,13:00,30.05.2022.,Direktan let.,85,85,nijeSletio
+188102,Moskva,Sant,15:30,16:45,11.03.2022.,Kompanija Ural Airlines,93,93,sletio
+190609,Sant,Moskva,18:00,19:30,08.04.2022.,Kratak let bez presjedanja. Kompanija Aeroflot.,74,74,sletio
+200101,Moskva,Njujork,04:20,22:00,11.11.2022.,Let sa presjedanjem. Kompanija Delta.,100,100,nijeSletio
