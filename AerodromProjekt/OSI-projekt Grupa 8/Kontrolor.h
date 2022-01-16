@@ -8,7 +8,7 @@
 class Kontrolor : public Korisnik
 {
 public:
-	Kontrolor(string, string);
+	Kontrolor(string, string, char susp = '0');
 
 	void kreirajLet(std::vector<Let>&);
 	void izmjenaStatusa(std::vector<Let>&);

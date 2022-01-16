@@ -7,7 +7,7 @@ using std::string;
 class Administrator : public Korisnik
 {
 public:
-	Administrator(string, string);
+	Administrator(string, string, char susp = '0');
 	
 	void kreirajNalog(std::vector<std::shared_ptr<Korisnik>>& );
 	void obrisiNalog(std::vector<std::shared_ptr<Korisnik>>&);

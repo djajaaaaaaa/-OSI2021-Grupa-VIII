@@ -9,7 +9,7 @@
 class Operater : public Korisnik
 {
 public:
-	Operater(string, string);
+	Operater(string, string, char susp = '0');
 	void spisakRezervacija() const;
 	void otvaranjeRezervacije(std::vector<Let>&);
 	void odobriRezervaciju(string, std::vector<Let>&, string);

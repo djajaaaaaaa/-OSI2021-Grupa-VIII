@@ -7,7 +7,7 @@
 #include <filesystem>
 #include "Let.h"
 
-Kontrolor::Kontrolor(string ime, string lozinka) : Korisnik(ime, lozinka, 'K')
+Kontrolor::Kontrolor(string ime, string lozinka, char susp) : Korisnik(ime, lozinka, 'K', susp)
 {
 
 }

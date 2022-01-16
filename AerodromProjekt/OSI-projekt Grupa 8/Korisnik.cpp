@@ -5,7 +5,7 @@ Korisnik::Korisnik() : suspendovan('0')
 
 }
 
-Korisnik::Korisnik(string korIme, string korLozinka, char tipNaloga) : tip(tipNaloga), suspendovan('0')
+Korisnik::Korisnik(string korIme, string korLozinka, char tipNaloga, char susp) : tip(tipNaloga), suspendovan(susp)
 {
 	if (korIme.length() > 20 || korLozinka.length() > 20)
 		throw "Predugacko korisnicko ime ili sifra, dozvoljeno 20 karaktera!";
@@ -37,6 +37,11 @@ string Korisnik::getLozinka() const
 	return lozinka;
 }
 
+char Korisnik::getSuspenzija()
+{
+	return suspendovan;
+}
+
 bool Korisnik::isSuspended()
 {
 	if (suspendovan == '0')
@@ -59,6 +64,8 @@ void Korisnik::ucitajizFajla(ifstream& is) const
 	is.read(const_cast<char*> (lozinka), sizeof(lozinka));
 	is.read(const_cast<char*> (&tip), sizeof(tip));
 	is.read(const_cast<char*>(&suspendovan), sizeof(suspendovan));
+
+	
 }
 
 void Korisnik::suspenduj()

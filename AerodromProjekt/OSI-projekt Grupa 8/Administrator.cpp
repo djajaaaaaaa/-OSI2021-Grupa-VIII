@@ -6,7 +6,7 @@
 #include <iostream>
 #include <algorithm>
 
-Administrator::Administrator(string ime, string lozinka) : Korisnik(ime, lozinka, 'A')
+Administrator::Administrator(string ime, string lozinka, char susp) : Korisnik(ime, lozinka, 'A', susp)
 {
 
 }
@@ -15,7 +15,7 @@ Administrator::Administrator(string ime, string lozinka) : Korisnik(ime, lozinka
 void Administrator::kreirajNalog(std::vector<std::shared_ptr<Korisnik>>& vector) // da li samo dodavanje u set ili i u datoteku
 {
 	fstream fin;
-	fin.open("korisnici.dat", ios::binary || ios::in || ios::app);
+	fin.open("korisnici.dat", ios::binary | ios::in | ios::app);
 
 	string ime;string lozinka;
 	char tip1;
@@ -37,7 +37,7 @@ void Administrator::kreirajNalog(std::vector<std::shared_ptr<Korisnik>>& vector)
 	}
 	
 	
-	// da li izbjeci ovo grananje i napraviti konstruktor korisnik pa upisati u fajl (da ne bude apstraktna klasa)?
+	
 	if (tip1 == 'a' || tip1 == 'A')
 	{
 		Administrator novi(ime, lozinka);
@@ -142,48 +142,13 @@ void Administrator::suspenzijaNaloga(std::vector<std::shared_ptr<Korisnik>>& vec
 		return;
 	}
 
-	string name = (*it)->getIme();
-	string loz = (*it)->getLozinka();
-	char tip = (*it)->getTip();
+	
+	if (flag == '1')
+		(*it)->suspenduj();
+	else
+		(*it)->ukloniSuspenziju();
 
-	vector.erase(it);
 
-	if (tip == 'A')
-	{
-		Administrator novi(ime, loz);
-		if (flag == '1')
-			novi.suspenduj();
-		else
-			novi.ukloniSuspenziju();
-		vector.push_back(std::make_shared<Korisnik>(novi));
-	}
-	else if (tip == 'S')
-	{
-		Sef novi(ime, loz);
-		if (flag == '1')
-			novi.suspenduj();
-		else
-			novi.ukloniSuspenziju();
-		vector.push_back(std::make_shared<Korisnik>(novi));
-	}
-	else if (tip == 'K')
-
-	{
-		Kontrolor novi(ime, loz);
-		if (flag == '1')
-			novi.suspenduj();
-		else
-			novi.ukloniSuspenziju();
-		vector.push_back(std::make_shared<Korisnik>(novi));
-	}
-	else if (tip == 'O')
-	{
-		Operater novi(ime, loz);
-		if (flag == '1')
-			novi.suspenduj();
-		else
-			novi.ukloniSuspenziju();
-		vector.push_back(std::make_shared<Korisnik>(novi));
-	}
+	
 
 }

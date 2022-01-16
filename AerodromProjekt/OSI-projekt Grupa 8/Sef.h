@@ -6,7 +6,7 @@
 class Sef : public Korisnik
 {
 public:
-	Sef(string, string);
+	Sef(string, string, char susp = '0');
 
 	void pregledRezervacija() const;
 	void sedmicniIzvjestaj(std::vector<Let>& letovi) const;

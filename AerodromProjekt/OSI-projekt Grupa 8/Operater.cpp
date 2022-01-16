@@ -1,6 +1,6 @@
 #include "Operater.h"
 
-Operater::Operater(string ime, string lozinka) : Korisnik(ime, lozinka, 'O')
+Operater::Operater(string ime, string lozinka, char susp) : Korisnik(ime, lozinka, 'O', susp)
 {
 
 }

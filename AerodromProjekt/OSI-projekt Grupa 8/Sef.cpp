@@ -4,7 +4,7 @@
 namespace fs = std::filesystem;
 
 
-Sef::Sef(string ime, string lozinka) : Korisnik(ime, lozinka, 'S')
+Sef::Sef(string ime, string lozinka, char susp) : Korisnik(ime, lozinka, 'S', susp)
 {
 
 }

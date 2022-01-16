@@ -40,13 +40,13 @@ Korisnik& prijavaSet(string username, string lozinka, std::vector<std::shared_pt
 {
 	auto it = std::find_if(vector.begin(),vector.end(), [username](std::shared_ptr<Korisnik> k) {return (*k).getIme() == username;});
 	if (it == vector.end())
-		throw std::exception("Korisnik ne postoji.");
+		throw KorisnikNePostoji("Korisnik ne postoji.");
 
 	if ((*it)->isSuspended() == true) 
-		throw std::exception("Korisnik suspendovan.");
+		throw KorisnikSuspendovan("Korisnik suspendovan.");
 
 	if ((*it)->getLozinka() != lozinka)
-		throw std::exception("Pogresna lozinka");
+		throw NeispravnaLozinka("Pogresna lozinka");
 
 	return **it;
 }
@@ -60,33 +60,33 @@ void ucitajKorisnike(std::vector<std::shared_ptr<Korisnik>>& vector, std::ifstre
 		temp.ucitajizFajla(fajl);
 		if (temp.getTip() == 'A')
 		{
-			Administrator novi(temp.getIme(), temp.getLozinka());
+			Administrator novi(temp.getIme(), temp.getLozinka(), temp.getSuspenzija());
 			vector.push_back(std::make_shared<Korisnik>(novi));
 		}
 		else if (temp.getTip() == 'K')
 		{
-			Kontrolor novi(temp.getIme(), temp.getLozinka());
+			Kontrolor novi(temp.getIme(), temp.getLozinka(), temp.getSuspenzija());
 			vector.push_back(std::make_shared<Korisnik>(novi));
 		}
 		else if (temp.getTip() == 'S')
 		{
-			Sef novi(temp.getIme(), temp.getLozinka());
+			Sef novi(temp.getIme(), temp.getLozinka(), temp.getSuspenzija());
 			vector.push_back(std::make_shared<Korisnik>(novi));
 		}
-		else
+		else if (temp.getTip() == 'O')
 		{
-			Operater novi(temp.getIme(), temp.getLozinka());
+			Operater novi(temp.getIme(), temp.getLozinka(), temp.getSuspenzija());
 			vector.push_back(std::make_shared<Korisnik>(novi));
 		}
 	}
 	fajl.close();
-
+	vector.pop_back();
 }
 
 void azurirajBazu(std::vector<std::shared_ptr<Korisnik>>& vector)
 {
 	ofstream fajl;
-	fajl.open("korisnici.dat", ios::binary || ios::out);
+	fajl.open("korisnici.dat", ios::binary | ios::out);
 
 	for (auto it = vector.begin(); it != vector.end(); it++)
 		(*it)->upisiuFajl(fajl);
@@ -116,7 +116,7 @@ void ucitajLetove(std::vector<Let>& letovi, ifstream& fin)
 int main()
 {
 	ifstream ucitavanje;
-	ucitavanje.open("korisnici.dat", ios::binary || ios::in);
+	ucitavanje.open("korisnici.dat", ios::binary | ios::in);
 	std::vector<std::shared_ptr<Korisnik> > korisnici;
 	ucitajKorisnike(korisnici, ucitavanje);
 	string tip, ime, lozinka;
@@ -324,8 +324,8 @@ int main()
 	{
 		cout << "Greska! Nepostojeci tip naloga!" << endl;
 	}
-    return 0;
 
 	azurirajBazu(korisnici);
+    return 0;
 }
 
