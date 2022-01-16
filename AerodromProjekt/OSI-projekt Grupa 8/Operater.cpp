@@ -16,7 +16,7 @@ void Operater::spisakRezervacija() const
 		i++;
 		string filename = entry.path().filename().string();
 		filename = filename.substr(0, filename.find_last_of("."));
-		cout << i << ". " << filename << endl;
+		cout << setw(5) <<i << ". " << filename << endl;
 	}
 }
 
@@ -45,8 +45,8 @@ void Operater::otvaranjeRezervacije(std::vector<Let>& letovi)
 		getline(fin, datum);
 
 		cout << "Sifra leta: " << sifraleta << endl
-			<< "Polazak: " << datum << " iz " << odakle << " u " << uzlet << " casova; Dolazak: "
-			<< gdje << " u " << slet << " casova" << endl;
+			<< "Polazak: " << datum << " u " << uzlet << "; Mjesto polaska: " << odakle << "; Dolazak: "
+			<< datum << " u " << slet << " casova; " << "Mjesto dolaska: " << gdje <<endl;
 		fin.close();
 		cout << "Validnost rezervacije:\n";
 		for (int i = 0; i < letovi.size(); i++)
@@ -141,6 +141,9 @@ void Operater::odobriRezervaciju(string sifrarez, std::vector<Let>& letovi, stri
 		filesystem::copy_file(path / "rezervacije" / (sifrarez + ".txt"),
 			path / "odobrene rezervacije" / (sifrarez + ".txt"));
 		fs::remove(path / "rezervacije" / (sifrarez + ".txt"));
+		ofstream fout(path / "odobrene rezervacije" / (sifrarez + ".txt"), ios::app);
+
+		fout << endl << this->getIme();
 		cout << "Rezervacija odobrena!\n";
 	}
 }
@@ -153,6 +156,9 @@ void  Operater::otkaziRezervaciju(string sifrarez) const
 	filesystem::copy_file(path / "rezervacije" / (sifrarez + ".txt"),
 		path / "otkazane rezervacije" / (sifrarez + ".txt"));
 	fs::remove(path / "rezervacije" / (sifrarez + ".txt"));
+
+	ofstream fout(path / "otkazane rezervacije" / (sifrarez + ".txt"), ios::app);
+	fout << endl << this->getIme();
 	cout << "Rezervacija otkazana!\n";
 }
 

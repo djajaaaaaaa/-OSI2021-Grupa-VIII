@@ -12,30 +12,6 @@
 #include "Exceptions.h"
 #include <vector>
 
-void initDat()
-{
-    ofstream fout("korisnici.dat", ios::out | ios::binary);
-    Administrator admin1("Marko", "marko123");
-    Administrator admin2("Janko", "janko123");
-    Kontrolor kontrolor1("Srdjan", "srdjan123");
-    Kontrolor kontrolor2("Stefan", "stefan123");
-    Operater operater1("Uros", "uros123");
-    Operater operater2("Milos", "milos123");
-    Sef sef1("Sofija", "sofija123");
-    Sef sef2("Atos", "atos123");
-
-    admin1.upisiuFajl(fout);
-    admin2.upisiuFajl(fout);
-    kontrolor1.upisiuFajl(fout);
-    kontrolor2.upisiuFajl(fout);
-    operater1.upisiuFajl(fout);
-    operater2.upisiuFajl(fout);
-    sef1.upisiuFajl(fout);
-    sef2.upisiuFajl(fout);
-
-    fout.close();
-}
-
 Korisnik& prijavaSet(string username, string lozinka, std::vector<std::shared_ptr<Korisnik>>& vector)
 {
 	auto it = std::find_if(vector.begin(),vector.end(), [username](std::shared_ptr<Korisnik> k) {return (*k).getIme() == username;});
