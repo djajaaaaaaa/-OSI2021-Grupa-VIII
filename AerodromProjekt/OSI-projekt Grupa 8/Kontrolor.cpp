@@ -1,7 +1,5 @@
 #include "Kontrolor.h"
 #include <iostream>
-#include "Kontrolor.h"
-#include <iostream>
 #include <vector>
 #include <sstream>
 #include <cstring>
@@ -25,6 +23,7 @@ void Kontrolor::kreirajLet(std::vector<Let>& letovi)
 	string opis;
 	string brojMjesta;
 	string brojSlobodnihMjesta;
+	string status = "nijeSletio";
 
 	cout << "Unesite podatke o letu:" << endl;
 	cout << "Sifra leta:" << endl;
@@ -67,7 +66,7 @@ void Kontrolor::kreirajLet(std::vector<Let>& letovi)
 	cin >> brojMjesta;
 	brojSlobodnihMjesta = brojMjesta;
 
-	Let let1(sifra, odlazak, dolazak, vrijemePolaska, vrijemeDolaska, datum, opis, brojMjesta, brojSlobodnihMjesta);
+	Let let1(sifra, odlazak, dolazak, vrijemePolaska, vrijemeDolaska, datum, opis, brojMjesta, brojSlobodnihMjesta, status);
 	string odgovor;
 	cout << "Potvrdite kreiranje leta: " << endl;
 	cout << "A) Da, kreiraj     B) Ne, odustani" << endl;
@@ -236,6 +235,7 @@ void Kontrolor::otkazivanjeLeta(std::vector<Let>& letovi)
 	{
 		letovi.erase(it);
 		cout << "Uspjesno ste obrisali let." << endl;
+		promijeniRaspored(letovi);
 
 		namespace fs = filesystem;
 		fs::path path = filesystem::current_path() / "rezervacije";
@@ -264,5 +264,25 @@ void Kontrolor::otkazivanjeLeta(std::vector<Let>& letovi)
 				fs::remove(path2 / (filename));
 		}
 		cout << "Sve rezervacije za let su izbrisane." << endl;
+	}
+}
+
+
+void Kontrolor::promijeniRaspored(std::vector<Let>& letovi)
+{
+	fstream fout;
+	fout.open("raspored.txt", ios::out);
+	for (std::vector<Let>::iterator it = letovi.begin(); it != letovi.end(); ++it)
+	{
+		fout << (*it).sifra << ",";
+		fout << (*it).odlazak << ",";
+		fout << (*it).dolazak << ",";
+		fout << (*it).vrijemePolaska << ",";
+		fout << (*it).vrijemeDolaska << ",";
+		fout << (*it).datum << ",";
+		fout << (*it).opis << ",";
+		fout << (*it).brojMjesta << ",";
+		fout << (*it).brojSlobodnihMjesta << ",";
+		fout << (*it).status << "\n";
 	}
 }

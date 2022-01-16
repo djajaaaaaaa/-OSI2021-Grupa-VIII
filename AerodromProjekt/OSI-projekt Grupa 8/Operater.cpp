@@ -20,7 +20,7 @@ void Operater::spisakRezervacija() const
 	}
 }
 
-void Operater::otvaranjeRezervacije(std::vector<Let>& letovi) const
+void Operater::otvaranjeRezervacije(std::vector<Let>& letovi)
 {
 	string sifrarez;
 	cout << "Unesite sifru rezervacije: ";
@@ -64,7 +64,7 @@ void Operater::otvaranjeRezervacije(std::vector<Let>& letovi) const
 					cin >> opcija;
 					if (opcija == 'A')
 					{
-						odobriRezervaciju(sifrarez);
+						odobriRezervaciju(sifrarez, letovi, datum);
 						return;
 					}
 					else if (opcija == 'B')
@@ -120,15 +120,29 @@ void Operater::odobreneRezervacije() const
 	}
 }
 
-void  Operater::odobriRezervaciju(string sifrarez) const
+void Operater::odobriRezervaciju(string sifrarez, std::vector<Let>& letovi, string datumLeta)
 {
-	namespace fs = filesystem;
-	fs::path path = filesystem::current_path();
+	string sifra(sifrarez, 0, 6);
+	std::vector<Let>::iterator it = find_if(letovi.begin(), letovi.end(), [sifra, datumLeta](const Let& let)
+		{
+			return(sifra == let.sifra && datumLeta == let.datum);
+		}
+	);
+	if (it != letovi.end())
+	{
+		int br = stoi((*it).brojSlobodnihMjesta);
+		br--;
+		(*it).brojSlobodnihMjesta = to_string(br);
+		azurirajRaspored(letovi);
 
-	filesystem::copy_file(path / "rezervacije" / (sifrarez + ".txt"),
-		path / "odobrene rezervacije" / (sifrarez + ".txt"));
-	fs::remove(path / "rezervacije" / (sifrarez + ".txt"));
-	cout << "Rezervacija odobrena!\n";
+		namespace fs = filesystem;
+		fs::path path = filesystem::current_path();
+
+		filesystem::copy_file(path / "rezervacije" / (sifrarez + ".txt"),
+			path / "odobrene rezervacije" / (sifrarez + ".txt"));
+		fs::remove(path / "rezervacije" / (sifrarez + ".txt"));
+		cout << "Rezervacija odobrena!\n";
+	}
 }
 
 void  Operater::otkaziRezervaciju(string sifrarez) const
@@ -140,4 +154,23 @@ void  Operater::otkaziRezervaciju(string sifrarez) const
 		path / "otkazane rezervacije" / (sifrarez + ".txt"));
 	fs::remove(path / "rezervacije" / (sifrarez + ".txt"));
 	cout << "Rezervacija otkazana!\n";
+}
+
+void Operater::azurirajRaspored(std::vector<Let>& letovi)
+{
+	fstream fout;
+	fout.open("raspored.txt", ios::out);
+	for (std::vector<Let>::iterator it = letovi.begin(); it != letovi.end(); ++it)
+	{
+		fout << (*it).sifra << ",";
+		fout << (*it).odlazak << ",";
+		fout << (*it).dolazak << ",";
+		fout << (*it).vrijemePolaska << ",";
+		fout << (*it).vrijemeDolaska << ",";
+		fout << (*it).datum << ",";
+		fout << (*it).opis << ",";
+		fout << (*it).brojMjesta << ",";
+		fout << (*it).brojSlobodnihMjesta << ",";
+		fout << (*it).status << "\n";
+	}
 }

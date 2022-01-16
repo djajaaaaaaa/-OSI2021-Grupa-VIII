@@ -19,5 +19,5 @@ private:
 	bool provjeraSifre(Let&, std::vector<Let>&);
 	bool provjeraVremena(Let&, std::vector<Let>&);
 	void azurirajRaspored(const Let&);
+	void promijeniRaspored(std::vector<Let>&);
 };
-

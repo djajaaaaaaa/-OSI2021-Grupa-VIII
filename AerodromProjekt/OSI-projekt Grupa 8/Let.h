@@ -40,4 +40,5 @@ public:
 	void printInfo() const;
 
 	friend class Kontrolor;
+	friend class Operater;
 };
